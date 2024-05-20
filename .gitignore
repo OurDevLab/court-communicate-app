@@ -1,0 +1,15 @@
+node_modules
+.env
+package-lock.json
+
+build/
+artifact.tar.gz
+
+*.log
+yarn-error.log
+
+!**/src/main/**
+!**/src/test/**
+*.DS_Store
+
+appDeploy.sh
