@@ -1,3 +1,5 @@
+import prisma from "./prisma";
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const { randomBytes } = require('crypto');
@@ -73,6 +75,10 @@ app.post('/events', async (req, res) => {
     res.send({});
 })
 
-app.listen(4001, () => {
-    console.log('Listening on 4001');
+const finishPrismaService = async () => await prisma.$disconnect();
+
+finishPrismaService();
+
+app.listen(5000, () => {
+    console.log('Listening on 5000');
 });
