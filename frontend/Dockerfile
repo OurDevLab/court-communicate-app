@@ -1,15 +1,12 @@
 FROM node:20
 
-
 WORKDIR /frontend
 
-COPY yarn.lock /frontend/
-COPY package.json /frontend/
-
-
-
-RUN yarn 
+# COPY yarn.lock /frontend/
+# COPY package.json /frontend/
 
 COPY . /frontend/
 
-CMD ["yarn", "dev"]
+RUN yarn install
+
+CMD ["yarn", "start"]
