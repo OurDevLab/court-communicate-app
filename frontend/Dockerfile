@@ -1,12 +1,13 @@
 FROM node:20
 
-WORKDIR /frontend
+WORKDIR /app
 
-# COPY yarn.lock /frontend/
-# COPY package.json /frontend/
-
-COPY . /frontend/
+COPY . .
 
 RUN yarn install
 
-CMD ["yarn", "start"]
+RUN yarn build
+
+EXPOSE 5173
+
+CMD ["yarn", "preview", "--host", "0.0.0.0", "--port", "5173"]

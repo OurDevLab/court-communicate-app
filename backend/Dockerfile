@@ -2,11 +2,10 @@ FROM node:20
 
 WORKDIR /backend
 
-# RUN apt-get -y update
-# RUN apt-get install -y openssl libssl-dev
-
 COPY . /backend/
 
 RUN yarn install
+
+EXPOSE 5000
 
 CMD ["yarn", "start"]
