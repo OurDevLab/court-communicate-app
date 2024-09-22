@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { Login, Register, Dashboard } from "./components/auth";
+import { CasesPage, AddCaseForm } from "./components/case";
+import {
+    CourtsPage,
+    AddCourtForm,
+    UpdateCourtForm,
+    DeleteCourtButton,
+} from "./components/court";
+import {
+    DepartmentsPage,
+    AddDepartmentForm,
+    UpdateDepartmentForm,
+    DeleteDepartmentButton,
+} from "./components/department";
+import { UpdateMessageForm, DeleteMessageButton } from "./components/message";
+import { UsersPage, AddUserForm } from "./components/user";
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React _ TEST</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+const App: React.FC = () => {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/users" element={<UsersPage />} />
+                <Route path="/users/add" element={<AddUserForm />} />
+                <Route path="/cases" element={<CasesPage />} />
+                <Route path="/cases/add" element={<AddCaseForm />} />
+                <Route path="/courts" element={<CourtsPage />} />
+                <Route path="/courts/add" element={<AddCourtForm />} />
+                <Route
+                    path="/courts/:id/edit"
+                    element={<UpdateCourtForm courtId={1} />}
+                />
+                <Route
+                    path="/courts/:id/delete"
+                    element={<DeleteCourtButton courtId={1} />}
+                />
+                <Route path="/departments" element={<DepartmentsPage />} />
+                <Route
+                    path="/departments/add"
+                    element={<AddDepartmentForm />}
+                />
+                <Route path="/cases" element={<CasesPage />} />
+                <Route path="/cases/add" element={<AddCaseForm />} />
+                <Route
+                    path="/messages/:id/edit"
+                    element={<UpdateMessageForm messageId={1} />}
+                />
+                <Route
+                    path="/messages/:id/delete"
+                    element={<DeleteMessageButton messageId={1} />}
+                />
+                <Route
+                    path="/departments/:id/edit"
+                    element={<UpdateDepartmentForm departmentId={1} />}
+                />
+                <Route
+                    path="/departments/:id/delete"
+                    element={<DeleteDepartmentButton departmentId={1} />}
+                />
+            </Routes>
+        </Router>
+    );
+};
 
-export default App
+export default App;
