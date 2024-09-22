@@ -15,7 +15,7 @@ import {
 } from "./api/routes";
 
 dotenv.config();
-const PORT = Number(process.env.BACKEND_PORT) || 5000;
+const PORT = Number(process.env.BACKEND_PORT) || 5001;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
