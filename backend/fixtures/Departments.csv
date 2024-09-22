@@ -1,0 +1,15 @@
+id,name,court_id,parent_department_id
+2,Izba Finansowa,1,1
+3,Izba Gospodarcza,1,1
+4,Izba Ogólnoadministracyjna,1,1
+5,Biuro Orzecznictwa,1,1
+6,Wydział Informacji Sądowej,1,1
+7,Wydział Organizacyjno-Prawny,1,1
+8,Wydział ds. Sędziów,1,1
+9,Wydział Finansowo-Budżetowy,1,1
+10,Wydział Spraw Osobowych,1,1
+11,Wydział Administracyjno-Gospodarczy,1,1
+12,Wydział Inwestycji,1,1
+13,Wydział Informatyki,1,1
+14,Wydział Ochrony i Zabezpieczenia Technicznego Budynków,1,1
+15,Biblioteka,1,1
