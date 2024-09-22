@@ -1,24 +1,22 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { Login, Register, Dashboard } from "./components/auth";
+import { CasesPage, AddCaseForm } from "./components/case";
 import {
-    Login,
-    Register,
-    Dashboard,
-    AddUserForm,
-    UsersPage,
-    AddCaseForm,
-    AddCourtForm,
-    AddDepartmentForm,
-    DeleteCourtButton,
-    DeleteDepartmentButton,
-    DeleteMessageButton,
-    UpdateCourtForm,
-    UpdateMessageForm,
-    UpdateDepartmentForm,
-    CasesPage,
     CourtsPage,
+    AddCourtForm,
+    UpdateCourtForm,
+    DeleteCourtButton,
+} from "./components/court";
+import {
     DepartmentsPage,
-} from "./components";
+    AddDepartmentForm,
+    UpdateDepartmentForm,
+    DeleteDepartmentButton,
+} from "./components/department";
+import { UpdateMessageForm, DeleteMessageButton } from "./components/message";
+import { UsersPage, AddUserForm } from "./components/user";
 
 const App: React.FC = () => {
     return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../api";
+import api from "../../api";
 
 const AddCaseForm: React.FC = () => {
     const [caseIdentifier, setCaseIdentifier] = useState("");
