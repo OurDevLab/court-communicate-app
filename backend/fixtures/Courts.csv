@@ -1,0 +1,17 @@
+court_id,name,seat,court_type,parent_court_id
+2,Wojewódzki Sąd Administracyjny w Białymstoku, województwo podlaskie,SPECIAL,1
+3,Wojewódzki Sąd Administracyjny w Bydgoszczy, województwo kujawsko-pomorskie,SPECIAL,1
+4,Wojewódzki Sąd Administracyjny w Gdańsku, województwo pomorskie,SPECIAL,1
+5,Wojewódzki Sąd Administracyjny w Gliwicach, województwo śląskie,SPECIAL,1
+6,Wojewódzki Sąd Administracyjny w Gorzowie Wielkopolskim, województwo lubuskie,SPECIAL,1
+7,Wojewódzki Sąd Administracyjny w Kielcach, województwo świętokrzyskie,SPECIAL,1
+8,Wojewódzki Sąd Administracyjny w Krakowie, województwo małopolskie,SPECIAL,1
+9,Wojewódzki Sąd Administracyjny w Lublinie, województwo lubelskie,SPECIAL,1
+10,Wojewódzki Sąd Administracyjny w Łodzi, województwo łódzkie,SPECIAL,1
+11,Wojewódzki Sąd Administracyjny w Olsztynie, województwo warmińsko-mazurskie,SPECIAL,1
+12,Wojewódzki Sąd Administracyjny w Opolu, województwo opolskie,SPECIAL,1
+13,Wojewódzki Sąd Administracyjny w Poznaniu, województwo wielkopolskie,SPECIAL,1
+14,Wojewódzki Sąd Administracyjny w Rzeszowie, województwo podkarpackie,SPECIAL,1
+15,Wojewódzki Sąd Administracyjny w Szczecinie, województwo zachodniopomorskie,SPECIAL,1
+16,Wojewódzki Sąd Administracyjny w Warszawie, województwo mazowieckie,SPECIAL,1
+17,Wojewódzki Sąd Administracyjny we Wrocławiu, dolnośląskie,SPECIAL,1

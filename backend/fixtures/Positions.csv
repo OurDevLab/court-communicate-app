@@ -1,0 +1,11 @@
+id,name,position_type
+1,Administrator,ADMIN
+2,Prezes NSA,PRESIDENT
+3,Prezes Izby Finansowej,MANAGER
+4,Prezes Izby Gospodarczej,MANAGER
+5,Prezes Izby Ogólnoadministracyjnej,MANAGER
+6,Dyrektor Biura Orzecznictwa NSA,MANAGER
+7,Rzecznik Prasowy NSA,MANAGER
+8,Szef Kancelarii Prezesa NSA,MANAGER
+9,Kierownik Sekretariatu,MANAGER
+10,Naczelnik Wydziału,MANAGER
