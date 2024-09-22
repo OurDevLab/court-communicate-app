@@ -4,12 +4,12 @@ services:
   database:
     image: postgres:14.1
     container_name: court_database
-    # env_file:
-    #   - ./.env
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    env_file:
+      - ./.env
+    # environment:
+    #   POSTGRES_DB: postgres
+    #   POSTGRES_USER: postgres
+    #   POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -18,10 +18,10 @@ services:
   backend:
     build: ./backend
     container_name: court_backend
-    # env_file:
-    #   - ./.env
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
+    env_file:
+      - ./.env
+    # environment:
+    #   DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
     ports:
       - 5000:5000
     volumes:
@@ -32,8 +32,8 @@ services:
   frontend:
     build: ./frontend
     container_name: court_frontend
-    # env_file:
-    #   - ./.env
+    env_file:
+      - ./.env
     volumes:
       - ./frontend:/frontend/
     ports:
@@ -42,8 +42,8 @@ services:
   gateway:
     build: ./gateway
     container_name: court_gateway
-    # env_file:
-    #   - ./.env
+    env_file:
+      - ./.env
     ports:
       - 8080:80
     depends_on:
