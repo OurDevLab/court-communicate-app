@@ -20,6 +20,7 @@ model User {
   refresh_token        String?
   name                 String?         @db.VarChar(250)
   surname              String?         @db.VarChar(250)
+  email                String?         @db.VarChar(250)
   role                 Role            @default(CITIZEN)
   Court                Court[]         @relation("PresidentOf")
   DepartmentManager    DepartmentManager[]
