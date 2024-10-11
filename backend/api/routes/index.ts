@@ -1,3 +1,4 @@
+export { default as AuthRouter } from "./Auth.router";
 export { default as CaseRouter } from "./Case.router";
 export { default as CourtRouter } from "./Court.router";
 export { default as DepartmentRouter } from "./Department.router";
