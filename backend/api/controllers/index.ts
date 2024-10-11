@@ -1,3 +1,4 @@
+export { default as AuthController } from "./Auth.controller";
 export { default as CaseController } from "./Case.controller";
 export { default as CourtController } from "./Court.controller";
 export { default as DepartmentController } from "./Department.controller";
