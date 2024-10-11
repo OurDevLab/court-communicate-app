@@ -4,117 +4,119 @@
 
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x", "debian-openssl-3.0.x"]
+  binaryTargets = ["native", "debian-openssl-1.1.x", "linux-arm64-openssl-1.1.x", "debian-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
   provider = "postgresql"
 }
 
 model User {
-  user_id              Int             @id @default(autoincrement())
-  login                String          @unique @db.VarChar(255)
-  password             String          @db.VarChar(255)
-  access_token         String?
-  refresh_token        String?
-  name                 String?         @db.VarChar(250)
-  surname              String?         @db.VarChar(250)
-  email                String?         @db.VarChar(250)
-  role                 Role            @default(CITIZEN)
-  Court                Court[]         @relation("PresidentOf")
-  DepartmentManager    DepartmentManager[]
-  CaseJudge            Case[]          @relation("Judge")
-  CaseRespondent       Case[]          @relation("Respondent")
-  CaseClerk            Case[]          @relation("Clerk")
-  CaseParty            CaseParty[]
-  Message              Message[]
+  user_id           Int                 @id @default(autoincrement())
+  login             String              @unique @db.VarChar(255)
+  password          String              @db.VarChar(255)
+  access_token      String?
+  refresh_token     String?
+  name              String?             @db.VarChar(250)
+  surname           String?             @db.VarChar(250)
+  email             String?             @db.VarChar(250)
+  role              Role                @default(CITIZEN)
+  Court             Court[]             @relation("PresidentOf")
+  DepartmentManager DepartmentManager[]
+  CaseJudge         Case[]              @relation("Judge")
+  CaseRespondent    Case[]              @relation("Respondent")
+  CaseClerk         Case[]              @relation("Clerk")
+  CaseParty         CaseParty[]
+  Message           Message[]
 }
 
 model Case {
-  case_id              Int             @id @default(autoincrement())
-  case_identifier      String          @unique @db.VarChar(255)
-  case_type            String          @db.VarChar(50)
-  case_description     String          @db.VarChar(1000)
-  judge_user_id        Int?            
-  respondent_user_id   Int?            
-  clerk_user_id        Int?            
-  department_id        Int?            
-  court_id             Int?            
-  Department           Department?      @relation(fields: [department_id], references: [id])
-  Court                Court?           @relation(fields: [court_id], references: [id])
-  Clerk                User?            @relation("Clerk", fields: [clerk_user_id], references: [user_id])
-  Judge                User?            @relation("Judge", fields: [judge_user_id], references: [user_id])
-  Respondent           User?            @relation("Respondent", fields: [respondent_user_id], references: [user_id])
-  CaseHistory          CaseHistory[]
-  Message              Message[]
-  CaseParty            CaseParty[]
+  case_id            Int           @id @default(autoincrement())
+  case_identifier    String        @unique @db.VarChar(255)
+  case_type          String        @db.VarChar(50)
+  case_description   String        @db.VarChar(1000)
+  judge_user_id      Int?
+  respondent_user_id Int?
+  clerk_user_id      Int?
+  department_id      Int?
+  court_id           Int?
+  Department         Department?   @relation(fields: [department_id], references: [id])
+  Court              Court?        @relation(fields: [court_id], references: [id])
+  Clerk              User?         @relation("Clerk", fields: [clerk_user_id], references: [user_id])
+  Judge              User?         @relation("Judge", fields: [judge_user_id], references: [user_id])
+  Respondent         User?         @relation("Respondent", fields: [respondent_user_id], references: [user_id])
+  CaseHistory        CaseHistory[]
+  Message            Message[]
+  CaseParty          CaseParty[]
 }
 
 model Court {
-  id                   Int             @id @default(autoincrement())
-  name                 String          @db.VarChar(255)
-  seat                 String          @db.VarChar(255)
-  court_type           String          @db.VarChar(50)
-  parent_court_id      Int?            
-  president_user_id    Int?            
-  Departments          Department[]     
-  Workers              User[]          @relation("PresidentOf")
-  Cases                Case[]
-  ParentCourt          Court?          @relation("ParentCourt", fields: [id], references: [id])
-  SubCourts            Court[]         @relation("ParentCourt")
+  id                Int          @id @default(autoincrement())
+  name              String       @db.VarChar(255)
+  seat              String       @db.VarChar(255)
+  court_type        String       @db.VarChar(50)
+  parent_court_id   Int?
+  president_user_id Int?
+  Departments       Department[]
+  Workers           User[]       @relation("PresidentOf")
+  Cases             Case[]
+  ParentCourt       Court?       @relation("ParentCourt", fields: [id], references: [id])
+  SubCourts         Court[]      @relation("ParentCourt")
 }
 
 model Department {
-  id                   Int             @id @default(autoincrement())
-  name                 String          @db.VarChar(255)
-  court_id             Int             
-  parent_department_id Int?            
+  id                   Int                 @id @default(autoincrement())
+  name                 String              @db.VarChar(255)
+  court_id             Int
+  parent_department_id Int?
   Managers             DepartmentManager[]
   Cases                Case[]
-  Court                Court           @relation(fields: [id], references: [id])
-  ParentDepartment     Department?     @relation("ParentDepartment", fields: [parent_department_id], references: [id])
-  SubDepartments       Department[]    @relation("ParentDepartment")
+  Court                Court               @relation(fields: [id], references: [id])
+  ParentDepartment     Department?         @relation("ParentDepartment", fields: [parent_department_id], references: [id])
+  SubDepartments       Department[]        @relation("ParentDepartment")
 }
 
 model DepartmentManager {
-  department_id        Int
-  user_id              Int
-  Department           Department      @relation(fields: [department_id], references: [id])
-  User                 User            @relation(fields: [user_id], references: [user_id])
+  department_id Int
+  user_id       Int
+  Department    Department @relation(fields: [department_id], references: [id])
+  User          User       @relation(fields: [user_id], references: [user_id])
+
   @@id([department_id, user_id])
 }
 
 model Position {
-  id                   Int             @id @default(autoincrement())
-  name                 String          @db.VarChar(255)
-  position_type        String          @db.VarChar(50)
+  id            Int    @id @default(autoincrement())
+  name          String @db.VarChar(255)
+  position_type String @db.VarChar(50)
 }
 
 model CaseHistory {
-  id                   Int             @id @default(autoincrement())
-  case_id              Int            
-  action               String          @db.VarChar(1000)
-  status               String          @db.VarChar(50)
-  timestamp            DateTime        @default(now())
-  Case                 Case            @relation(fields: [case_id], references: [case_id])
+  id        Int      @id @default(autoincrement())
+  case_id   Int
+  action    String   @db.VarChar(1000)
+  status    String   @db.VarChar(50)
+  timestamp DateTime @default(now())
+  Case      Case     @relation(fields: [case_id], references: [case_id])
 }
 
 model Message {
-  id                   Int             @id @default(autoincrement())
-  case_id              Int             
-  sender_user_id       Int             
-  content              String          @db.VarChar(1000)
-  timestamp            DateTime        @default(now())
-  Case                 Case            @relation(fields: [case_id], references: [case_id])
-  User                 User            @relation(fields: [sender_user_id], references: [user_id])
+  id             Int      @id @default(autoincrement())
+  case_id        Int
+  sender_user_id Int
+  content        String   @db.VarChar(1000)
+  timestamp      DateTime @default(now())
+  Case           Case     @relation(fields: [case_id], references: [case_id])
+  User           User     @relation(fields: [sender_user_id], references: [user_id])
 }
 
 model CaseParty {
-  case_id              Int
-  user_id              Int
-  Case                 Case            @relation(fields: [case_id], references: [case_id])
-  User                 User            @relation(fields: [user_id], references: [user_id])
+  case_id Int
+  user_id Int
+  Case    Case @relation(fields: [case_id], references: [case_id])
+  User    User @relation(fields: [user_id], references: [user_id])
+
   @@id([case_id, user_id])
 }
 
