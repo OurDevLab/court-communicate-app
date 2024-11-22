@@ -1,3 +1,4 @@
+//Skarga kasacyjna z pomoca ChatGPT :)
 import React from 'react';
 import { Form, Input, Button, DatePicker, Select, InputNumber } from 'antd';
 import moment from 'moment';
