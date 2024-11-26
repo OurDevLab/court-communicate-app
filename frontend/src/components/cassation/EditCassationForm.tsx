@@ -4,20 +4,23 @@ import moment from 'moment';
 
 const { Option } = Select;
 
-const AddCassationForm = () => {
-  const onFinish = (values) => {
-    //console.log('Form values:', values);
-    //Jak dobrze myślę tu powinno być komunikacja z API
-  };
-
+const EditCassationForm = ({ initialValues, onFinish }) => {
   return (
-    <Form onFinish={onFinish} layout="vertical">
+    <Form
+      initialValues={{
+        ...initialValues,
+        date: moment(initialValues.date),
+        sentenceDate: moment(initialValues.sentenceDate),
+      }}
+      onFinish={onFinish}
+      layout="vertical"
+    >
       <Form.Item label="Miejscowość" name="location">
         <Input placeholder="Wpisz miejscowość" />
       </Form.Item>
 
       <Form.Item label="Data" name="date" rules={[{ required: true, message: 'Wybierz datę!' }]}>
-        <DatePicker defaultValue={moment()} format="DD-MM-YYYY" />
+        <DatePicker format="DD-MM-YYYY" />
       </Form.Item>
 
       <Form.Item label="Sąd" name="court" rules={[{ required: true, message: 'Wybierz sąd!' }]}>
@@ -25,7 +28,6 @@ const AddCassationForm = () => {
           <Option value="warszawa">Warszawie</Option>
           <Option value="krakow">Krakowie</Option>
           <Option value="poznan">Poznaniu</Option>
-          {/* Możesz dodać inne opcje */}
         </Select>
       </Form.Item>
 
@@ -48,20 +50,20 @@ const AddCassationForm = () => {
         <Input placeholder="Wpisz sygnaturę akt" />
       </Form.Item>
 
-      <Form.Item label="Wartość przedmiotu zaskarżenia" name="value" rules={[{ required: true, message: 'Wpisz wartość przedmiotu!' }]}>
+      <Form.Item label="Wartość przedmiotu zaskarżenia" name="value">
         <InputNumber placeholder="Wpisz wartość" style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label="Wpis" name="entryValue" rules={[{ required: true, message: 'Wpisz wysokość wpisu!' }]}>
+      <Form.Item label="Wpis" name="entryValue">
         <InputNumber placeholder="Wpisz wysokość wpisu" style={{ width: '100%' }} />
       </Form.Item>
 
-      <Form.Item label="Rozporządzenie Rady Ministrów" name="ordinance" rules={[{ required: true, message: 'Wpisz numer rozporządzenia!' }]}>
+      <Form.Item label="Rozporządzenie Rady Ministrów" name="ordinance">
         <Input placeholder="Wpisz rozporządzenie Rady Ministrów z dnia" />
       </Form.Item>
 
-      <Form.Item label="Wyrok z dnia" name="sentenceDate" rules={[{ required: true, message: 'Wybierz datę wyroku!' }]}>
-        <DatePicker defaultValue={moment()} format="YYYY-MM-DD" />
+      <Form.Item label="Wyrok z dnia" name="sentenceDate">
+        <DatePicker format="YYYY-MM-DD" />
       </Form.Item>
 
       <Form.Item label="Sygn. akt wyroku" name="sygnatureSentence">
@@ -86,11 +88,11 @@ const AddCassationForm = () => {
 
       <Form.Item>
         <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
-          Złoż Skargę
+          Zapisz zmiany
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-export default AddCassationForm;
+export default EditCassationForm;
