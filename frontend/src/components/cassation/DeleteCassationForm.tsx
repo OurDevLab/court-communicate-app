@@ -1,7 +1,11 @@
 import React from 'react';
 import { Form, Button, Modal } from 'antd';
 
-const DeleteCassationForm = ({ onConfirm, onCancel }) => {
+interface DeleteCassationForm {
+  onConfirm: () => void; // Funkcja bez argumentów, nic nie zwraca
+  onCancel?: () => void; // Funkcja opcjonalna
+}
+const DeleteCassationForm: React.FC<DeleteCassationForm> = ({ onConfirm, onCancel }) => {
   const handleDelete = () => {
     Modal.confirm({
       title: 'Czy na pewno chcesz usunąć skargę?',
@@ -16,7 +20,7 @@ const DeleteCassationForm = ({ onConfirm, onCancel }) => {
   return (
     <Form layout="vertical">
       <Form.Item>
-        <Button type="danger" style={{ width: '100%' }} onClick={handleDelete}>
+        <Button danger style={{ width: '100%' }} onClick={handleDelete}>
           Usuń Skargę
         </Button>
       </Form.Item>

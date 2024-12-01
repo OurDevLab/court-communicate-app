@@ -4,7 +4,30 @@ import moment from 'moment';
 
 const { Option } = Select;
 
-const EditCassationForm = ({ initialValues, onFinish }) => {
+// Interfejs dla właściwości formularza
+interface EditCassationFormProps {
+  initialValues: {
+    location: string;
+    date: string;
+    court: string;
+    complainant: string;
+    attorney?: string;
+    govbody: string;
+    sygnature: string;
+    value?: number;
+    entryValue?: number;
+    ordinance: string;
+    sentenceDate: string;
+    sygnatureSentence?: string;
+    plea?: string;
+    resolution?: string;
+    justification?: string;
+    attachments?: string;
+  };
+  onFinish: (values: any) => void; // Możesz zastąpić `any` bardziej precyzyjnym typem, jeśli masz dokładną strukturę danych.
+}
+
+const EditCassationForm: React.FC<EditCassationFormProps> = ({ initialValues, onFinish }) => {
   return (
     <Form
       initialValues={{

@@ -1,11 +1,11 @@
-import React from 'react';
+//import React from 'react';
 import { Form, Input, Button, DatePicker, Select, InputNumber } from 'antd';
 import moment from 'moment';
 
 const { Option } = Select;
 
 const AddCassationForm = () => {
-  const onFinish = (values) => {
+  const onFinish = () => {
     //console.log('Form values:', values);
     //Jak dobrze myślę tu powinno być komunikacja z API
   };
