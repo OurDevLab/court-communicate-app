@@ -1,24 +1,22 @@
 import * as core from "express-serve-static-core";
 
-import * as dotenv from "dotenv";
-dotenv.config();
+import { ConfigVariables, ServerStatuses, ServerMessages } from "../../config";
+
+const { jwtSecret, jwtExpiration } = ConfigVariables;
+const { OK, CREATED, BAD_REQUEST, INTERNAL_ERROR, NOT_FOUND, UNAUTHORIZED } =
+    ServerStatuses;
+const { AuthMessages } = ServerMessages;
 
 import { AuthService } from "../services";
 const authActions = new AuthService();
-
-// Sekret do generowania JWT (powinien być bezpiecznie przechowywany)
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-const TOKEN_EXPIRATION = process.env.JWT_TOKEN_EXPIRES || "1h";
 
 class AuthController {
     async registerUser(req: core.Request, res: core.Response) {
         const { login, password, name, surname, role } = req.body;
 
         try {
-            // Haszowanie hasła
             const hashedPassword = authActions.hashPassword(password);
 
-            // Tworzenie użytkownika w bazie danych
             const newUser = await authActions.createUser({
                 login,
                 password: hashedPassword,
@@ -28,17 +26,19 @@ class AuthController {
             });
 
             if (newUser) {
-                res.status(201).json({
-                    message: "Rejestracja zakończona sukcesem",
+                res.status(CREATED).json({
+                    message: AuthMessages.REGISTER_SUCCESS,
                     user: newUser,
                 });
             } else {
-                res.status(400).json({
-                    error: "Podane dane są nieprawidłowe, rejestracja nie powiodła się",
+                res.status(BAD_REQUEST).json({
+                    error: AuthMessages.REGISTER_BAD_DATA,
                 });
             }
         } catch (error) {
-            res.status(500).json({ error: "Błąd podczas rejestracji" });
+            res.status(INTERNAL_ERROR).json({
+                error: AuthMessages.REGISTER_ERROR,
+            });
         }
     }
 
@@ -46,50 +46,51 @@ class AuthController {
         const { login, password } = req.body;
 
         try {
-            // Znalezienie użytkownika w bazie danych
             const user = await authActions.findUserByLogin(login);
 
             if (!user) {
                 return res
-                    .status(404)
-                    .json({ error: "Nie znaleziono użytkownika" });
+                    .status(NOT_FOUND)
+                    .json({ error: AuthMessages.LOGIN_NOT_FOUND });
             }
 
-            // Weryfikacja hasła
             const isPasswordValid = await authActions.verifyPassword(
                 password,
                 user.password
             );
 
             if (!isPasswordValid) {
-                return res.status(401).json({ error: "Nieprawidłowe hasło" });
+                return res
+                    .status(UNAUTHORIZED)
+                    .json({ error: AuthMessages.LOGIN_BAD_PASSWORD });
             }
 
-            // Generowanie tokenu JWT
             const token = authActions.generateToken({
                 id: user.user_id,
                 role: user.role,
-                key: SECRET_KEY,
-                expiresIn: TOKEN_EXPIRATION,
+                key: jwtSecret,
+                expiresIn: jwtExpiration,
             });
 
             if (token) {
-                res.status(200).json({
-                    message: "Zalogowano pomyślnie",
+                res.status(OK).json({
+                    message: AuthMessages.LOGIN_SUCCESS,
                     token,
                 });
             } else {
-                res.status(401).json({
-                    error: "Nieprawidłowe dane do uwierzytelnienia przez token",
+                res.status(UNAUTHORIZED).json({
+                    error: AuthMessages.LOGIN_AUTHORIZATION_FAIL,
                 });
             }
         } catch (error) {
-            res.status(500).json({ error: "Błąd podczas logowania" });
+            res.status(INTERNAL_ERROR).json({
+                error: AuthMessages.LOGIN_ERROR,
+            });
         }
     }
 
     verifyUserAuthorization = (req: core.Request, res: core.Response) => {
-        res.json({ message: "Masz dostęp do chronionego zasobu" });
+        res.json({ message: AuthMessages.AUTHORIZATION_VERIFICATION });
     };
 }
 
