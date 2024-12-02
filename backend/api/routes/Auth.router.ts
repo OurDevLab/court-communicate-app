@@ -1,22 +1,19 @@
 import express from "express";
-import * as dotenv from "dotenv";
 
-import { authenticateToken } from "../middlewares/Auth.middleware";
+import { ServerPaths } from "../../config";
+import { AuthMiddleware } from "../middlewares";
+import { AuthController } from "../controllers";
 
-import AuthController from "../controllers/Auth.controller";
-
+const { LOGIN, REGISTER, PROTECTED } = ServerPaths;
 const authController = new AuthController();
 
 const authRouter = express();
-dotenv.config();
 
-authRouter.post("/register", authController.registerUser);
-
-authRouter.post("/login", authController.loginUser);
-
+authRouter.post(REGISTER, authController.registerUser);
+authRouter.post(LOGIN, authController.loginUser);
 authRouter.get(
-    "/protected",
-    authenticateToken,
+    PROTECTED,
+    AuthMiddleware,
     authController.verifyUserAuthorization
 );
 
