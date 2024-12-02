@@ -1,13 +1,12 @@
 import * as core from "express-serve-static-core";
 
 import { DepartmentService } from "../services";
+import { ServerStatuses } from "../../config";
+
+const { OK, CREATED, INTERNAL_ERROR, NOT_FOUND } = ServerStatuses;
 const departmentActions = new DepartmentService();
 
-// 5. CRUD dla modelu Department (Departament)
-
 class DepartmentController {
-    // a) Tworzenie departamentu:
-
     async addNewDepartment(req: core.Request, res: core.Response) {
         const { name, court_id } = req.body;
         try {
@@ -16,35 +15,31 @@ class DepartmentController {
                 court_id,
             });
 
-            res.status(201).json(newDepartment);
+            res.status(CREATED).json(newDepartment);
         } catch (error) {
-            res.status(500).json({
+            res.status(INTERNAL_ERROR).json({
                 error: "Nie udało się utworzyć departamentu",
             });
         }
     }
-
-    // b) Odczyt wszystkich departamentów:
 
     async getAllDepartments(req: core.Request, res: core.Response) {
         try {
             const departments = await departmentActions.findManyDepartments();
 
             if (departments) {
-                res.status(200).json(departments);
+                res.status(OK).json(departments);
             } else {
-                res.status(404).json({
+                res.status(NOT_FOUND).json({
                     error: "Nie znaleziono żadnych departamentów",
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            res.status(INTERNAL_ERROR).json({
                 error: "Nie udało się pobrać listy departamentów",
             });
         }
     }
-
-    // c) Odczyt konkretnego departamentu:
 
     async getSelectedDepartment(req: core.Request, res: core.Response) {
         const { id } = req.params;
@@ -53,20 +48,18 @@ class DepartmentController {
                 Number(id)
             );
             if (department) {
-                res.status(200).json(department);
+                res.status(OK).json(department);
             } else {
-                res.status(404).json({
+                res.status(NOT_FOUND).json({
                     error: "Departament nie został znaleziony",
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            res.status(INTERNAL_ERROR).json({
                 error: "Błąd podczas pobierania danych departamentu",
             });
         }
     }
-
-    // d) Aktualizacja departamentu:
 
     async updateDepartment(req: core.Request, res: core.Response) {
         const { id } = req.params;
@@ -80,23 +73,21 @@ class DepartmentController {
             );
 
             if (updatedDepartment) {
-                res.status(200).json({
+                res.status(OK).json({
                     message:
                         "Dane wybranego departamentu zostały zaktualizowane",
                 });
             } else {
-                res.status(404).json({
+                res.status(NOT_FOUND).json({
                     error: "Nie znaleziono departamentu przeznaczonego do aktualizacji danych",
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            res.status(INTERNAL_ERROR).json({
                 error: "Aktualizacja departamentu nie powiodła się",
             });
         }
     }
-
-    // e) Usunięcie departamentu:
 
     async removeDepartment(req: core.Request, res: core.Response) {
         const { id } = req.params;
@@ -106,16 +97,16 @@ class DepartmentController {
             );
 
             if (removedDepartment) {
-                res.status(200).json({
+                res.status(OK).json({
                     message: "Departament został usunięty",
                 });
             } else {
-                res.status(404).json({
+                res.status(NOT_FOUND).json({
                     error: "Nie znaleziono departamentu przeznaczonego do usunięcia",
                 });
             }
         } catch (error) {
-            res.status(500).json({
+            res.status(INTERNAL_ERROR).json({
                 error: "Nie udało się usunąć departamentu",
             });
         }
