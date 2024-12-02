@@ -1,13 +1,13 @@
 import express from "express";
 
-import TestController from "../controllers/Test.controller";
+import { ServerPaths } from "../../config";
+import { TestController } from "../controllers";
 
+const { TEST } = ServerPaths;
 const testController = new TestController();
 
 const testRouter = express();
 
-// 0. Endpoint testowy
-
-testRouter.get("/test", testController.getTestMessage);
+testRouter.get(TEST, testController.getTestMessage);
 
 export default testRouter;
