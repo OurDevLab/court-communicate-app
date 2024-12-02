@@ -1,113 +1,76 @@
 import * as core from "express-serve-static-core";
 
+import { ServerStatuses } from "../../config";
 import { MessageService } from "../services";
+
+const { OK, CREATED, INTERNAL_ERROR, NO_CONTENT } = ServerStatuses;
 const messageActions = new MessageService();
 
-// 3. CRUD dla modelu Message (Wiadomość)
-
 class MessageController {
-    // a) Tworzenie wiadomości:
+    async createMessage(req: core.Request, res: core.Response) {
+        const { caseId, recipientId, text, file } = req.body;
+        const senderId = req.user.id;
 
-    async addNewMessage(req: core.Request, res: core.Response) {
-        const { case_id, content, sender_user_id } = req.body;
         try {
             const newMessage = await messageActions.createMessage({
-                case_id,
-                content,
-                sender_user_id,
+                messageData: {
+                    caseId,
+                    recipientId,
+                    senderId,
+                    text,
+                    file,
+                },
             });
-            res.status(201).json(newMessage);
+            res.status(CREATED).json(newMessage);
         } catch (error) {
-            res.status(500).json({ error: "Nie udało się wysłać wiadomości" });
+            res.status(INTERNAL_ERROR).json({
+                error: "Nie udało się utworzyć wiadomości",
+            });
         }
     }
 
-    // b) Odczyt wszystkich wiadomości:
+    async getMessagesByCase(req: core.Request, res: core.Response) {
+        const { caseId } = req.params;
 
-    async getAllMessages(req: core.Request, res: core.Response) {
         try {
-            const messages = await messageActions.findManyMessages();
-
-            if (messages) {
-                res.status(200).json(messages);
-            } else {
-                res.status(404).json({
-                    error: "Nie znaleziono żadnych wiadomości",
-                });
-            }
-        } catch (error) {
-            res.status(500).json({ error: "Nie udało się pobrać wiadomości" });
-        }
-    }
-
-    // c) Odczyt wiadomości konkretnej sprawy:
-
-    async getSelectedCaseMessages(req: core.Request, res: core.Response) {
-        const { id } = req.params;
-        try {
-            const caseMessages = await messageActions.findMessageByCaseID(
-                Number(id)
+            const messages = await messageActions.findMessagesByCase(
+                Number(caseId)
             );
-
-            if (caseMessages) {
-                res.status(200).json(caseMessages);
-            } else {
-                res.status(404).json({
-                    error: "Nie znaleziono wiadomości przypisanych do sprawy",
-                });
-            }
+            res.status(OK).json(messages);
         } catch (error) {
-            res.status(500).json({
-                error: "Błąd podczas pobierania wiadomości",
+            res.status(INTERNAL_ERROR).json({
+                error: "Nie udało się pobrać wiadomości",
             });
         }
     }
-
-    // d) Aktualizacja wiadomości:
 
     async updateMessage(req: core.Request, res: core.Response) {
         const { id } = req.params;
-        const { content } = req.body;
-        try {
-            const updatedMessage = await messageActions.updateMessage(
-                Number(id),
-                { content }
-            );
+        const { text, file } = req.body;
 
-            if (updatedMessage) {
-                res.status(200).json({
-                    message: "Wybrana wiadomość została zaktualizowana",
-                });
-            } else {
-                res.status(404).json({
-                    error: "Nie znaleziono wiadomości przeznaczonej do aktualizacji",
-                });
-            }
+        try {
+            const updatedMessage = await messageActions.updateMessage({
+                messageID: Number(id),
+                messageData: { text, file },
+            });
+            res.status(OK).json(updatedMessage);
         } catch (error) {
-            res.status(500).json({
-                error: "Aktualizacja wiadomości nie powiodła się",
+            res.status(INTERNAL_ERROR).json({
+                error: "Nie udało się zaktualizować wiadomości",
             });
         }
     }
 
-    // e) Usunięcie wiadomości:
-
-    async removeMessage(req: core.Request, res: core.Response) {
+    async deleteMessage(req: core.Request, res: core.Response) {
         const { id } = req.params;
-        try {
-            const removedMessage = messageActions.deleteMessage(Number(id));
 
-            if (removedMessage) {
-                res.status(200).json({
-                    message: "Wybrana wiadomość została usunięta",
-                });
-            } else {
-                res.status(404).json({
-                    error: "Nie znaleziono wiadomości przeznaczonej do usunięcia",
-                });
-            }
+        try {
+            await messageActions.deleteMessage(Number(id));
+            res.status(NO_CONTENT).send();
         } catch (error) {
-            res.status(500).json({ error: "Nie udało się usunąć wiadomości" });
+            res.status(INTERNAL_ERROR).json({
+                error: "Nie udało się usunąć wiadomości",
+            });
         }
     }
 }
