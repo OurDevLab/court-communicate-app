@@ -2,7 +2,8 @@ import prisma from "./prisma";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import * as dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import path from "path";
 
 import {
     AuthRouter,
@@ -14,26 +15,44 @@ import {
     UserRouter,
 } from "./api/routes";
 
-dotenv.config();
-const PORT = Number(process.env.BACKEND_PORT) || 5001;
+import { initializeWebSocket } from "./api/handlers/websocket.handler";
+import { ConfigVariables, ServerPaths } from "./config";
+
+const { clientURL, jwtSecret, portNumber } = ConfigVariables;
+const { ROOT, UPLOADS } = ServerPaths;
+
+const __dirname = path.dirname(__filename);
+
+const PORT = Number(portNumber);
 const app = express();
+
+app.use(UPLOADS, express.static(`${__dirname}${UPLOADS}`));
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+    cors({
+        credentials: true,
+        origin: clientURL,
+    })
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
 
-app.use("/", AuthRouter);
-app.use("/", CaseRouter);
-app.use("/", CourtRouter);
-app.use("/", DepartmentRouter);
-app.use("/", MessageRouter);
-app.use("/", TestRouter);
-app.use("/", UserRouter);
+app.use(ROOT, AuthRouter);
+app.use(ROOT, CaseRouter);
+app.use(ROOT, CourtRouter);
+app.use(ROOT, DepartmentRouter);
+app.use(ROOT, MessageRouter);
+app.use(ROOT, TestRouter);
+app.use(ROOT, UserRouter);
 
 const finishPrismaService = async () => await prisma.$disconnect();
 
 finishPrismaService();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
 });
+
+initializeWebSocket(server, jwtSecret);
