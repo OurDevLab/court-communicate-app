@@ -28,7 +28,8 @@ model User {
   CaseRespondent    Case[]              @relation("Respondent")
   CaseClerk         Case[]              @relation("Clerk")
   CaseParty         CaseParty[]
-  Message           Message[]
+  sentMessages      Message[]           @relation("MessageSender")
+  receivedMessages  Message[]           @relation("MessageRecipient")
 }
 
 model Case {
@@ -47,7 +48,7 @@ model Case {
   Judge              User?         @relation("Judge", fields: [judge_user_id], references: [user_id])
   Respondent         User?         @relation("Respondent", fields: [respondent_user_id], references: [user_id])
   CaseHistory        CaseHistory[]
-  Message            Message[]
+  Messages           Message[]
   CaseParty          CaseParty[]
 }
 
@@ -102,13 +103,19 @@ model CaseHistory {
 }
 
 model Message {
-  id             Int      @id @default(autoincrement())
-  case_id        Int
-  sender_user_id Int
-  content        String   @db.VarChar(1000)
-  timestamp      DateTime @default(now())
-  Case           Case     @relation(fields: [case_id], references: [case_id])
-  User           User     @relation(fields: [sender_user_id], references: [user_id])
+  id          Int      @id @default(autoincrement())
+  senderId    Int
+  recipientId Int
+  caseId      Int
+  text        String?
+  file        String?
+  timestamp   DateTime @default(now())
+
+  sender    User @relation("MessageSender", fields: [senderId], references: [user_id])
+  recipient User @relation("MessageRecipient", fields: [recipientId], references: [user_id])
+  case      Case @relation(fields: [caseId], references: [case_id])
+
+  @@index([caseId])
 }
 
 model CaseParty {
