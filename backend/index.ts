@@ -21,7 +21,7 @@ import { ConfigVariables, ServerPaths } from "./config";
 const { clientURL, jwtSecret, portNumber } = ConfigVariables;
 const { ROOT, UPLOADS } = ServerPaths;
 
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 const PORT = Number(portNumber);
 const app = express();

@@ -8,8 +8,8 @@ const messageActions = new MessageService();
 
 class MessageController {
     async createMessage(req: core.Request, res: core.Response) {
-        const { caseId, recipientId, text, file } = req.body;
-        const senderId = req.user.id;
+        const { caseId, recipientId, senderId, text, file } = req.body;
+        // const senderId = req.user.id;
 
         try {
             const newMessage = await messageActions.createMessage({
