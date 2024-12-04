@@ -4,12 +4,12 @@ services:
   database:
     image: postgres:14.1
     container_name: court_database
-    env_file:
-      - ./.env
-    # environment:
-    #   POSTGRES_DB: postgres
-    #   POSTGRES_USER: postgres
-    #   POSTGRES_PASSWORD: postgres
+    # env_file:
+    #   - ./.env
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -18,10 +18,10 @@ services:
   backend:
     build: ./backend
     container_name: court_backend
-    env_file:
-      - ./.env
-    # environment:
-    #   DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
+    # env_file:
+    #   - ./.env
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
     ports:
       - 5001:5001
     volumes:
