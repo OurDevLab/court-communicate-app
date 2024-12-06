@@ -1,6 +1,6 @@
 import prisma from "../../prisma";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { UserModel } from "../models";
 
