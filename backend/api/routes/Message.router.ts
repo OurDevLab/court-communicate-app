@@ -1,33 +1,19 @@
 import express from "express";
 
-import MessageController from "../controllers/Message.controller";
+import { ServerPaths } from "../../config";
+import { MessageController } from "../controllers";
 
+const { MESSAGES } = ServerPaths;
 const messageController = new MessageController();
 
 const messageRouter = express();
 
-// 3. CRUD dla modelu Message (Wiadomość)
-// a) Tworzenie wiadomości:
-
-messageRouter.post("/messages", messageController.addNewMessage);
-
-// b) Odczyt wszystkich wiadomości:
-
-messageRouter.get("/messages", messageController.getAllMessages);
-
-// c) Odczyt wiadomości konkretnej sprawy:
-
+messageRouter.post(MESSAGES, messageController.createMessage);
 messageRouter.get(
-    "/cases/:id/messages",
-    messageController.getSelectedCaseMessages
+    `${MESSAGES}/case/:caseId`,
+    messageController.getMessagesByCase
 );
-
-// d) Aktualizacja wiadomości:
-
-messageRouter.put("/messages/:id", messageController.updateMessage);
-
-// e) Usunięcie wiadomości:
-
-messageRouter.delete("/messages/:id", messageController.removeMessage);
+messageRouter.put(`${MESSAGES}/:id`, messageController.updateMessage);
+messageRouter.delete(`${MESSAGES}/:id`, messageController.deleteMessage);
 
 export default messageRouter;

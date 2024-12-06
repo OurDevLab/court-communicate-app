@@ -1,5 +1,3 @@
-import prisma from "../../prisma";
-
 import * as core from "express-serve-static-core";
 
 class TestController {

@@ -1,35 +1,25 @@
 import express from "express";
 
-import DepartmentController from "../controllers/Department.controller";
+import { ServerPaths } from "../../config";
+import { DepartmentController } from "../controllers";
 
+const { DEPARTMENTS } = ServerPaths;
 const departmentController = new DepartmentController();
 
 const departmentRouter = express();
 
-// 5. CRUD dla modelu Department (Departament)
-// a) Tworzenie departamentu:
-
-departmentRouter.post("/departments", departmentController.addNewDepartment);
-
-// b) Odczyt wszystkich departamentów:
-
-departmentRouter.get("/departments", departmentController.getAllDepartments);
-
-// c) Odczyt konkretnego departamentu:
-
+departmentRouter.post(DEPARTMENTS, departmentController.addNewDepartment);
+departmentRouter.get(DEPARTMENTS, departmentController.getAllDepartments);
 departmentRouter.get(
-    "/departments/:id",
+    `${DEPARTMENTS}/:id`,
     departmentController.getSelectedDepartment
 );
-
-// d) Aktualizacja departamentu:
-
-departmentRouter.put("/departments/:id", departmentController.updateDepartment);
-
-// e) Usunięcie departamentu:
-
+departmentRouter.put(
+    `${DEPARTMENTS}/:id`,
+    departmentController.updateDepartment
+);
 departmentRouter.delete(
-    "/departments/:id",
+    `${DEPARTMENTS}/:id`,
     departmentController.removeDepartment
 );
 
