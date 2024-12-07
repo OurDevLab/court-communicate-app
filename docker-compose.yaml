@@ -23,7 +23,7 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:postgres@database:5432/postgres
     ports:
-      - 5000:5000
+      - 5001:5001
     volumes:
       - ./backend:/backend/
     depends_on:
@@ -32,8 +32,8 @@ services:
   frontend:
     build: ./frontend
     container_name: court_frontend
-    # env_file:
-    #   - ./.env
+    env_file:
+      - ./.env
     volumes:
       - ./frontend:/frontend/
     ports:
@@ -42,8 +42,8 @@ services:
   gateway:
     build: ./gateway
     container_name: court_gateway
-    # env_file:
-    #   - ./.env
+    env_file:
+      - ./.env
     ports:
       - 8080:80
     depends_on:
