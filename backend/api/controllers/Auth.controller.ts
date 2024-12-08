@@ -1,13 +1,13 @@
 import * as core from "express-serve-static-core";
 
 import { ConfigVariables, ServerStatuses, ServerMessages } from "../../config";
+import { AuthService } from "../services";
 
 const { jwtSecret, jwtExpiration } = ConfigVariables;
 const { OK, CREATED, BAD_REQUEST, INTERNAL_ERROR, NOT_FOUND, UNAUTHORIZED } =
     ServerStatuses;
 const { AuthMessages } = ServerMessages;
 
-import { AuthService } from "../services";
 const authActions = new AuthService();
 
 class AuthController {

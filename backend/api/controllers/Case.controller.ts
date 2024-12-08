@@ -1,9 +1,11 @@
 import * as core from "express-serve-static-core";
 
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 import { CaseService } from "../services";
 
 const { OK, CREATED, INTERNAL_ERROR, NOT_FOUND } = ServerStatuses;
+const { CaseMessages } = ServerMessages;
+
 const caseActions = new CaseService();
 
 class CaseController {
@@ -30,7 +32,7 @@ class CaseController {
             res.status(CREATED).json(newCase);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się utworzyć sprawy",
+                error: CaseMessages.CREATE_CASE_ERROR,
             });
         }
     }
@@ -43,12 +45,12 @@ class CaseController {
                 res.status(OK).json(cases);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono żadnych spraw",
+                    error: CaseMessages.NONE_CASE_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się pobrać listy spraw",
+                error: CaseMessages.GET_CASE_LIST_ERROR,
             });
         }
     }
@@ -62,12 +64,12 @@ class CaseController {
                 res.status(OK).json(caseData);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Sprawa nie została znaleziona",
+                    error: CaseMessages.SELECTED_CASE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Błąd podczas pobierania sprawy",
+                error: CaseMessages.GET_SELECTED_CASE_ERROR,
             });
         }
     }
@@ -93,16 +95,16 @@ class CaseController {
 
             if (updatedCase) {
                 res.status(OK).json({
-                    message: "Wybrana sprawa została zaktualizowana",
+                    message: CaseMessages.UPDATE_CASE_SUCCESS,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono sprawy przeznaczonej do aktualizacji",
+                    error: CaseMessages.CASE_TO_UPDATE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Aktualizacja sprawy nie powiodła się",
+                error: CaseMessages.UPDATE_CASE_ERROR,
             });
         }
     }
@@ -114,16 +116,16 @@ class CaseController {
 
             if (removedCase) {
                 res.status(OK).json({
-                    message: "Wybrana sprawa została usunięta",
+                    message: CaseMessages.CASE_DELETE_SUCCES,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono sprawy przeznaczonej do usunięcia",
+                    error: CaseMessages.CASE_TO_DELETE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się usunąć sprawy",
+                error: CaseMessages.CASE_DELETE_ERROR,
             });
         }
     }

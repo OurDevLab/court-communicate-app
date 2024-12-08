@@ -4,11 +4,7 @@ import bcrypt from "bcryptjs";
 
 import { UserModel } from "../models";
 
-// 2. CRUD dla modelu User (Użytkownik)
-
 class UserService {
-    // a) Tworzenie użytkownika:
-
     async createUser(userData: UserModel.CreateUser): Promise<UserModel.User> {
         const { login, password, name, surname, role } = userData;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -30,8 +26,6 @@ class UserService {
         }
     }
 
-    // b) Odczyt wszystkich użytkowników:
-
     async findManyUsers(
         userSelector?: UserModel.UserSelector
     ): Promise<UserModel.User[]> {
@@ -50,8 +44,6 @@ class UserService {
         }
     }
 
-    // c) Odczyt konkretnego użytkownika:
-
     async findUserByID(userID: number): Promise<UserModel.User | Boolean> {
         try {
             const user = await prisma.user.findUnique({
@@ -66,8 +58,6 @@ class UserService {
             throw new Error(error);
         }
     }
-
-    // d) Aktualizacja użytkownika:
 
     async updateUser(
         userID: number,
@@ -86,8 +76,6 @@ class UserService {
             throw new Error(error);
         }
     }
-
-    // e) Usunięcie użytkownika:
 
     async deleteUser(userID: number): Promise<UserModel.User> {
         try {

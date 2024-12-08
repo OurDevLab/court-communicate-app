@@ -1,9 +1,11 @@
 import * as core from "express-serve-static-core";
 
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 import { UserService } from "../services";
 
 const { OK, CREATED, INTERNAL_ERROR, NOT_FOUND } = ServerStatuses;
+const { UserMessages } = ServerMessages;
+
 const userActions = new UserService();
 
 class UserController {
@@ -24,7 +26,7 @@ class UserController {
             res.status(CREATED).json(newUser);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się utworzyć użytkownika",
+                error: UserMessages.CREATE_USER_ERROR,
             });
         }
     }
@@ -37,12 +39,12 @@ class UserController {
                 res.status(OK).json(users);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono żadnych użytkowników",
+                    error: UserMessages.NONE_USER_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się pobrać listy użytkowników",
+                error: UserMessages.GET_USERS_ERROR,
             });
         }
     }
@@ -56,12 +58,12 @@ class UserController {
                 res.status(OK).json(user);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Użytkownik nie został znaleziony",
+                    error: UserMessages.SELECTED_USER_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Błąd podczas pobierania danych użytkownika",
+                error: UserMessages.GET_SELECTED_USER_ERROR,
             });
         }
     }
@@ -78,16 +80,16 @@ class UserController {
 
             if (updatedUser) {
                 res.status(OK).json({
-                    message: "Wybrany użytkownik został zaktualizowany",
+                    message: UserMessages.UPDATE_USER_SUCCESS,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono użytkownika przeznaczonego do aktualizacji",
+                    error: UserMessages.USER_TO_UPDATE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Aktualizacja użytkownika nie powiodła się",
+                error: UserMessages.UPDATE_USER_ERROR,
             });
         }
     }
@@ -98,15 +100,17 @@ class UserController {
             const removedUser = await userActions.deleteUser(Number(id));
 
             if (removedUser) {
-                res.status(OK).json({ message: "Użytkownik został usunięty" });
+                res.status(OK).json({
+                    message: UserMessages.DELETE_USER_SUCCES,
+                });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono użytkownika przeznaczonego do usunięcia",
+                    error: UserMessages.USER_TO_DELETE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się usunąć użytkownika",
+                error: UserMessages.DELETE_USER_ERROR,
             });
         }
     }

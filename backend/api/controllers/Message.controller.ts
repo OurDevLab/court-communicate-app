@@ -1,9 +1,11 @@
 import * as core from "express-serve-static-core";
 
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 import { MessageService } from "../services";
 
 const { OK, CREATED, INTERNAL_ERROR, NO_CONTENT } = ServerStatuses;
+const { MessageMessages } = ServerMessages;
+
 const messageActions = new MessageService();
 
 class MessageController {
@@ -24,7 +26,7 @@ class MessageController {
             res.status(CREATED).json(newMessage);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się utworzyć wiadomości",
+                error: MessageMessages.CREATE_MESSAGE_ERROR,
             });
         }
     }
@@ -39,7 +41,7 @@ class MessageController {
             res.status(OK).json(messages);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się pobrać wiadomości",
+                error: MessageMessages.GET_CASE_MESSAGES_ERROR,
             });
         }
     }
@@ -56,7 +58,7 @@ class MessageController {
             res.status(OK).json(updatedMessage);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się zaktualizować wiadomości",
+                error: MessageMessages.UPDATE_MESSAGE_ERROR,
             });
         }
     }
@@ -69,7 +71,7 @@ class MessageController {
             res.status(NO_CONTENT).send();
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się usunąć wiadomości",
+                error: MessageMessages.DELETE_MESSAGE_ERROR,
             });
         }
     }
