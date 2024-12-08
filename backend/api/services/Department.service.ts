@@ -2,11 +2,7 @@ import prisma from "../../prisma";
 
 import { DepartmentModel } from "../models";
 
-// 2. CRUD dla modelu Department (Departament)
-
 class DepartmentService {
-    // a) Tworzenie departamentu:
-
     async createDepartment(
         departmentData: DepartmentModel.CreateDepartment
     ): Promise<DepartmentModel.Department> {
@@ -26,8 +22,6 @@ class DepartmentService {
         }
     }
 
-    // b) Odczyt wszystkich departamentów:
-
     async findManyDepartments(
         departmentSelector?: DepartmentModel.DepartmentSelector
     ): Promise<DepartmentModel.Department[]> {
@@ -46,8 +40,6 @@ class DepartmentService {
         }
     }
 
-    // c) Odczyt konkretnego departamentu:
-
     async findDepartmentByID(
         departmentID: number
     ): Promise<DepartmentModel.Department> {
@@ -65,8 +57,6 @@ class DepartmentService {
         }
     }
 
-    // d) Aktualizacja departamentu:
-
     async updateDepartment(
         departmentID: number,
         departmentData: DepartmentModel.UpdateDepartment
@@ -82,8 +72,6 @@ class DepartmentService {
             throw new Error(error);
         }
     }
-
-    // e) Usunięcie departamentu:
 
     async deleteDepartment(
         departmentID: number
