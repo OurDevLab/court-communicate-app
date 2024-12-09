@@ -295,3 +295,75 @@ button:focus-visible {
   flex-direction: column;
   max-width: 50%;
 }
+
+.chat-section {
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.list-item {
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.list-item-default {
+  background-color: #eaeaea;
+  color: #333;
+}
+
+.list-item-selected {
+  background-color: #646cff;
+  color: white;
+}
+
+.chat-messages {
+  background: #1a1a1a;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.message-sent {
+  text-align: right;
+  color: #0a84ff;
+}
+
+.message-received {
+  text-align: left;
+  color: #ffffff;
+}
+
+.message-content {
+  display: inline-block;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 60%;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-username {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #c0c0c0;
+  font-size: 0.9rem;
+}
+
+.footer-icon {
+  width: 16px;
+  height: 16px;
+}
