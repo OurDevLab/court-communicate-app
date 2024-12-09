@@ -17,11 +17,13 @@ import {
 } from "./components/department";
 import { UpdateMessageForm, DeleteMessageButton } from "./components/message";
 import { UsersPage, AddUserForm } from "./components/user";
+import { Chat } from "./components/chat";
 
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<Chat />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/dashboard" element={<Dashboard />} />
