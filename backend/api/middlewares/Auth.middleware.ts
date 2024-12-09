@@ -31,7 +31,7 @@ const authenticateToken = (
             return res.status(403).json({ error: "Nieprawidłowy token" });
         }
 
-        req.user = user as { userId: number; role: string };
+        req.user = user as { id: number; role: string };
         next();
     });
 };

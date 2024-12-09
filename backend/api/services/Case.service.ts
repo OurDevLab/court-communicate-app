@@ -49,6 +49,32 @@ class CaseService {
         }
     }
 
+    async findUserCases(userID: number): Promise<CaseModel.Case | Boolean> {
+        try {
+            const caseData = await prisma.case.findMany({
+                where: {
+                    OR: [
+                        { judge_user_id: userID },
+                        { respondent_user_id: userID },
+                        { clerk_user_id: userID },
+                    ],
+                },
+                select: {
+                    case_id: true,
+                    case_identifier: true,
+                    case_description: true,
+                },
+            });
+            if (caseData) {
+                return caseData;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     async findCaseByID(caseID: number): Promise<CaseModel.Case | Boolean> {
         try {
             const caseData = await prisma.case.findUnique({

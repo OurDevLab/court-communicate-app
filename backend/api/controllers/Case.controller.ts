@@ -55,6 +55,19 @@ class CaseController {
         }
     }
 
+    async getUserCases(req: core.Request, res: core.Response) {
+        const { id } = req.user;
+
+        try {
+            const cases = await caseActions.findUserCases(Number(id));
+            res.status(OK).json(cases);
+        } catch (error) {
+            res.status(INTERNAL_ERROR).json({
+                error: CaseMessages.GET_CASE_LIST_ERROR,
+            });
+        }
+    }
+
     async getSelectedCase(req: core.Request, res: core.Response) {
         const { id } = req.params;
         try {
