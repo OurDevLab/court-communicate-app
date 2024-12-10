@@ -70,7 +70,7 @@ const Chat: React.FC<Props> = () => {
         }
     }
 
-    function sendMessage(ev?: React.FormEvent, file: any = null) {
+    function sendMessage(ev?: React.FormEvent, file = null) {
         if (ev) ev.preventDefault();
 
         ws?.send(

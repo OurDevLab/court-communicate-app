@@ -1,9 +1,9 @@
 import axios from "axios";
 
 interface Props {
-    messages: any;
-    userId: any;
-    inputRef: any;
+    messages;
+    userId;
+    inputRef;
 }
 
 const ChatMessageBox: React.FC<Props> = ({ messages, userId, inputRef }) => {
