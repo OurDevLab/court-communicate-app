@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { UserContext } from "../../context/user.context";
-import { uniqBy } from "lodash";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { UserContext } from "../../context/User.context";
+import { isArray, uniqBy } from "lodash";
 import axios from "axios";
 
 import {
@@ -11,7 +11,9 @@ import {
     ChatForm,
 } from ".";
 
-export default function Chat() {
+interface Props {}
+
+const Chat: React.FC<Props> = () => {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [cases, setCases] = useState([]);
     const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
@@ -39,7 +41,7 @@ export default function Chat() {
     async function fetchCases() {
         try {
             const res = await axios.get(`/cases`);
-            setCases(res.data);
+            if (isArray(cases)) setCases(res.data);
         } catch (error) {
             console.error("Błąd podczas pobierania spraw:", error);
         }
@@ -120,36 +122,39 @@ export default function Chat() {
 
     const messagesWithoutDupes = uniqBy(messages, "_id");
 
-    return (
-        <div className="dashboard-wrapper">
-            <div className="dashboard-header">
-                <SidebarContent
-                    cases={cases}
-                    selectedCaseId={selectedCaseId}
-                    setSelectedCaseId={setSelectedCaseId}
-                />
-                <SidebarFooter username={username} logout={logout} />
-            </div>
-            <div className="flex flex-col chat-section">
-                <div className="flex-grow">
-                    {!selectedCaseId && <ChatEmptyContent />}
+    if (cases && cases.length)
+        return (
+            <div className="dashboard-wrapper">
+                <div className="dashboard-header">
+                    <SidebarContent
+                        cases={cases}
+                        selectedCaseId={selectedCaseId}
+                        setSelectedCaseId={setSelectedCaseId}
+                    />
+                    <SidebarFooter username={username} logout={logout} />
+                </div>
+                <div className="flex flex-col chat-section">
+                    <div className="flex-grow">
+                        {!selectedCaseId && <ChatEmptyContent />}
+                        {selectedCaseId && (
+                            <ChatMessageBox
+                                messages={messagesWithoutDupes}
+                                userId={id}
+                                inputRef={divUnderMessages}
+                            />
+                        )}
+                    </div>
                     {selectedCaseId && (
-                        <ChatMessageBox
-                            messages={messagesWithoutDupes}
-                            userId={id}
-                            inputRef={divUnderMessages}
+                        <ChatForm
+                            newMessageText={newMessageText}
+                            setNewMessageText={setNewMessageText}
+                            sendMessage={sendMessage}
+                            sendFile={sendFile}
                         />
                     )}
                 </div>
-                {selectedCaseId && (
-                    <ChatForm
-                        newMessageText={newMessageText}
-                        setNewMessageText={setNewMessageText}
-                        sendMessage={sendMessage}
-                        sendFile={sendFile}
-                    />
-                )}
             </div>
-        </div>
-    );
-}
+        );
+};
+
+export default Chat;

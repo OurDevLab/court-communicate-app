@@ -1,4 +1,8 @@
-const ChatEmptyContent = () => {
+import React from "react";
+
+interface Props {}
+
+const ChatEmptyContent: React.FC<Props> = () => {
     return (
         <div className="flex flex-col empty-content-container">
             <h3 className="empty-content-title">

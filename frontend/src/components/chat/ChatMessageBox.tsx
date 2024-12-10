@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const ChatMessageBox = ({ messages, userId, inputRef }) => {
+interface Props {
+    messages: any;
+    userId: any;
+    inputRef: any;
+}
+
+const ChatMessageBox: React.FC<Props> = ({ messages, userId, inputRef }) => {
     return (
         <div className="relative h-full">
             <div className="overflow-y-scroll chat-messages">

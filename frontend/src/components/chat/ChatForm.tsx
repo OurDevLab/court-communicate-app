@@ -1,13 +1,17 @@
-const ChatForm = ({
-    newMessageText,
-    setNewMessageText,
-    sendMessage,
-    sendFile,
-}: {
+import React from "react";
+
+interface Props {
     newMessageText: string;
     setNewMessageText: React.Dispatch<React.SetStateAction<string>>;
     sendMessage: (ev?: React.FormEvent) => void;
     sendFile: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const ChatForm: React.FC<Props> = ({
+    newMessageText,
+    setNewMessageText,
+    sendMessage,
+    sendFile,
 }) => {
     return (
         <form className="form-group" onSubmit={sendMessage}>

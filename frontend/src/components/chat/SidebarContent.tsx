@@ -1,4 +1,12 @@
-const SidebarContent = ({
+import React from "react";
+
+interface Props {
+    cases: { id: number; name: string }[];
+    selectedCaseId: number | null;
+    setSelectedCaseId: (id: number | null) => void;
+}
+
+const SidebarContent: React.FC<Props> = ({
     cases,
     selectedCaseId,
     setSelectedCaseId,
