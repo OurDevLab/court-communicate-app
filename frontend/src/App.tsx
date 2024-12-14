@@ -63,7 +63,7 @@ const App: React.FC = () => {
                 />
 
                 <Route path="/cases/edit/:id" element={<UpdateCaseForm />} />
-                <Route path="/courts/:id" element={<UpdateCourtForm />} />
+                <Route path="/courts/edit/:id" element={<UpdateCourtForm />} />
 
                 <Route
                     path="/departments/edit/:id"
