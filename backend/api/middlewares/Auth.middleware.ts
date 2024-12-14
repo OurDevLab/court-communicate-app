@@ -19,19 +19,13 @@ const authenticateToken = (
     res,
     next
 ) => {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({ error: "Brak tokenu" });
-    }
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "Brak tokenu" });
 
     jwt.verify(token, jwtSecret, (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: "Nieprawidłowy token" });
-        }
+        if (err) return res.status(403).json({ error: "Nieprawidłowy token" });
 
-        req.user = user as { id: number; role: string };
+        req.user = user as { id: number; role: string; email: string };
         next();
     });
 };

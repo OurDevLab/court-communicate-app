@@ -56,17 +56,21 @@ class CaseController {
     }
 
     async getUserCases(req: core.Request, res: core.Response) {
-        const { id } = req.user;
-
+        const userId = req.user?.id; // Typ jest teraz rozpoznawalny.
+    
+        if (!userId) {
+            return res.status(403).json({ error: "Unauthorized access" });
+        }
+    
         try {
-            const cases = await caseActions.findUserCases(Number(id));
+            const cases = await caseActions.findUserCases(userId);
             res.status(OK).json(cases);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
                 error: CaseMessages.GET_CASE_LIST_ERROR,
             });
         }
-    }
+    }    
 
     async getSelectedCase(req: core.Request, res: core.Response) {
         const { id } = req.params;
