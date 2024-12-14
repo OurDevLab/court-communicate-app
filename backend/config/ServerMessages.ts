@@ -49,6 +49,8 @@ export const CourtMessages = {
 export const DepartmentMessages = {
     CREATE_DEPARTMENT_ERROR: "Nie udało się utworzyć departamentu",
     NONE_DEPARTMENT_FOUND: "Nie znaleziono żadnych departamentów",
+    NONE_DEPARTMENT_FOUND_FOR_COURT:
+        "Nie znaleziono departamentów przypisanych do wybranego sądu",
     GET_DEPARTMENTS_ERROR: "Nie udało się pobrać listy departamentów",
     SELECTED_DEPARTMENT_NOT_FOUND: "Departament nie został znaleziony",
     GET_SELECTED_DEPARTMENT_ERROR:

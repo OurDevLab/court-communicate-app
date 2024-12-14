@@ -40,6 +40,19 @@ class DepartmentService {
         }
     }
 
+    async findDepartmentsByCourtID(
+        courtID: number
+    ): Promise<DepartmentModel.Department[]> {
+        try {
+            const departments = await prisma.department.findMany({
+                where: { court_id: courtID },
+            });
+            return departments;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     async findDepartmentByID(
         departmentID: number
     ): Promise<DepartmentModel.Department> {

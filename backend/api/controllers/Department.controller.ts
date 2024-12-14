@@ -43,6 +43,29 @@ class DepartmentController {
         }
     }
 
+    async getDepartmentsByCourtID(req: core.Request, res: core.Response) {
+        const { court_id } = req.params;
+
+        try {
+            const departments =
+                await departmentActions.findDepartmentsByCourtID(
+                    Number(court_id)
+                );
+
+            if (departments.length > 0) {
+                res.status(OK).json(departments);
+            } else {
+                res.status(NOT_FOUND).json({
+                    error: DepartmentMessages.NONE_DEPARTMENT_FOUND_FOR_COURT,
+                });
+            }
+        } catch (error) {
+            res.status(INTERNAL_ERROR).json({
+                error: DepartmentMessages.GET_DEPARTMENTS_ERROR,
+            });
+        }
+    }
+
     async getSelectedDepartment(req: core.Request, res: core.Response) {
         const { id } = req.params;
         try {

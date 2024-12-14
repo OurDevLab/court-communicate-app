@@ -11,6 +11,10 @@ const departmentRouter = express();
 departmentRouter.post(DEPARTMENTS, departmentController.addNewDepartment);
 departmentRouter.get(DEPARTMENTS, departmentController.getAllDepartments);
 departmentRouter.get(
+    `${DEPARTMENTS}/byCourt/:court_id/`,
+    departmentController.getDepartmentsByCourtID
+);
+departmentRouter.get(
     `${DEPARTMENTS}/:id`,
     departmentController.getSelectedDepartment
 );
