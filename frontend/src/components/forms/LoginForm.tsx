@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
-const Login: React.FC = () => {
+const LoginForm: React.FC = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -44,4 +44,4 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
+export default LoginForm;

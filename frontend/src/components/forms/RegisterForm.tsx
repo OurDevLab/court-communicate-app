@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
-const Register: React.FC = () => {
+const RegisterForm: React.FC = () => {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -61,4 +61,4 @@ const Register: React.FC = () => {
     );
 };
 
-export default Register;
+export default RegisterForm;
