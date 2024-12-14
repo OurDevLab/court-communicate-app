@@ -1,49 +1,22 @@
 import { useNavigate } from "react-router-dom";
+import { Navigation } from ".";
 
 const Dashboard: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="dashboard-container">
-            <nav className="dashboard-nav">
-                <ul className="dashboard-nav-list">
-                    <li
-                        className="dashboard-nav-item"
-                        onClick={() => navigate("/")}
-                    >
-                        Strona główna
-                    </li>
-                    <li
-                        className="dashboard-nav-item"
-                        onClick={() => navigate("/courts")}
-                    >
-                        Sądy
-                    </li>
-                    <li
-                        className="dashboard-nav-item"
-                        onClick={() => navigate("/cases")}
-                    >
-                        Sprawy
-                    </li>
-                    <li
-                        className="dashboard-nav-item"
-                        onClick={() => navigate("/chat")}
-                    >
-                        Komunikacja
-                    </li>
-                </ul>
-            </nav>
-
-            <h1 className="dashboard-header">Application Dashboard</h1>
+        <div className="container">
+            <Navigation />
+            <h1 className="header">CourtsApp - Strona główna</h1>
 
             <div className="dashboard-grid">
                 <div
                     className="dashboard-card"
                     onClick={() => navigate("/courts")}
                 >
-                    <h2 className="dashboard-card-title">Courts</h2>
+                    <h2 className="dashboard-card-title">Sądy</h2>
                     <p className="dashboard-card-description">
-                        View and manage the list of courts.
+                        Zobacz i zarządzaj listą sądów.
                     </p>
                 </div>
 
@@ -51,29 +24,30 @@ const Dashboard: React.FC = () => {
                     className="dashboard-card"
                     onClick={() => navigate("/cases")}
                 >
-                    <h2 className="dashboard-card-title">Cases</h2>
+                    <h2 className="dashboard-card-title">Sprawy</h2>
                     <p className="dashboard-card-description">
-                        Access and manage case records.
+                        Wejdź do wykazu i zarządzaj zarejestrowanymi sprawami.
                     </p>
                 </div>
 
                 <div
                     className="dashboard-card"
-                    onClick={() => navigate("/documents/complaint")}
+                    onClick={() => navigate("/documents")}
                 >
-                    <h2 className="dashboard-card-title">Complaint Form</h2>
+                    <h2 className="dashboard-card-title">Panel Dokumentów</h2>
                     <p className="dashboard-card-description">
-                        File a new complaint.
+                        Przejdź do panelu udostępniającego formularze dokumentów
+                        do złożenia.
                     </p>
                 </div>
 
                 <div
                     className="dashboard-card"
-                    onClick={() => navigate("/documents/cassation")}
+                    onClick={() => navigate("/users")}
                 >
-                    <h2 className="dashboard-card-title">Cassation Form</h2>
+                    <h2 className="dashboard-card-title">Użytkownicy</h2>
                     <p className="dashboard-card-description">
-                        Submit a cassation document.
+                        Użyj listy użytkowników do zarządzania nimi.
                     </p>
                 </div>
 
@@ -81,9 +55,25 @@ const Dashboard: React.FC = () => {
                     className="dashboard-card"
                     onClick={() => navigate("/chat")}
                 >
-                    <h2 className="dashboard-card-title">Communicator</h2>
+                    <h2 className="dashboard-card-title">Komunikacja</h2>
                     <p className="dashboard-card-description">
-                        Communicate with other users.
+                        Skorzystaj z przystępnego komunikatora celem kontaktu w
+                        wybranych sprawach.
+                    </p>
+                </div>
+
+                <div
+                    className="dashboard-card"
+                    onClick={() =>
+                        alert(
+                            "Uzyskaj dostęp do statystyk w zewnętrznej aplikacji StatsApp"
+                        )
+                    }
+                >
+                    <h2 className="dashboard-card-title">Statystyki</h2>
+                    <p className="dashboard-card-description">
+                        Uzyskaj dostęp do statystyk w zewnętrznej aplikacji{" "}
+                        <strong>StatsApp</strong>
                     </p>
                 </div>
             </div>
