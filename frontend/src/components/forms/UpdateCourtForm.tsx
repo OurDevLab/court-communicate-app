@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateCourtForm: React.FC = () => {
+    const navigate = useNavigate();
     const { id: courtId } = useParams();
 
     const [court, setCourt] = useState({
@@ -34,42 +35,58 @@ const UpdateCourtForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Nazwa sądu:</label>
-                <input
-                    type="text"
-                    value={court.name}
-                    onChange={(e) =>
-                        setCourt({ ...court, name: e.target.value })
-                    }
-                    required
-                />
-            </div>
-            <div>
-                <label>Siedziba sądu:</label>
-                <input
-                    type="text"
-                    value={court.seat}
-                    onChange={(e) =>
-                        setCourt({ ...court, seat: e.target.value })
-                    }
-                    required
-                />
-            </div>
-            <div>
-                <label>Typ sądu:</label>
-                <input
-                    type="text"
-                    value={court.court_type}
-                    onChange={(e) =>
-                        setCourt({ ...court, court_type: e.target.value })
-                    }
-                    required
-                />
-            </div>
-            <button type="submit">Zaktualizuj sąd</button>
-        </form>
+        <div className="form-wrapper">
+            <h1>Edytuj sąd</h1>
+            <form className="form-container" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Nazwa sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={court.name}
+                        onChange={(e) =>
+                            setCourt({ ...court, name: e.target.value })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Siedziba sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={court.seat}
+                        onChange={(e) =>
+                            setCourt({ ...court, seat: e.target.value })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Typ sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={court.court_type}
+                        onChange={(e) =>
+                            setCourt({ ...court, court_type: e.target.value })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-buttons-group">
+                    <button type="submit" className="form-button">
+                        Zaktualizuj sąd
+                    </button>
+                    <button
+                        onClick={() => navigate("/courts")}
+                        className="form-button form-button-cancel"
+                    >
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 

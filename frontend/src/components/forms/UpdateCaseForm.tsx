@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UpdateCaseForm: React.FC = () => {
+    const navigate = useNavigate();
     const { id: caseId } = useParams();
 
     const [caseData, setCaseData] = useState({
@@ -30,48 +31,67 @@ const UpdateCaseForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Identyfikator sprawy:</label>
-                <input
-                    type="text"
-                    value={caseData.case_identifier}
-                    onChange={(e) =>
-                        setCaseData({
-                            ...caseData,
-                            case_identifier: e.target.value,
-                        })
-                    }
-                    required
-                />
-            </div>
-            <div>
-                <label>Typ sprawy:</label>
-                <input
-                    type="text"
-                    value={caseData.case_type}
-                    onChange={(e) =>
-                        setCaseData({ ...caseData, case_type: e.target.value })
-                    }
-                    required
-                />
-            </div>
-            <div>
-                <label>Opis sprawy:</label>
-                <input
-                    type="text"
-                    value={caseData.case_description}
-                    onChange={(e) =>
-                        setCaseData({
-                            ...caseData,
-                            case_description: e.target.value,
-                        })
-                    }
-                    required
-                />
-            </div>
-            <button type="submit">Zaktualizuj sprawę</button>
-        </form>
+        <div className="form-wrapper">
+            <h1>Edytuj sprawę</h1>
+            <form className="form-container" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Sygnatura sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseData.case_identifier}
+                        onChange={(e) =>
+                            setCaseData({
+                                ...caseData,
+                                case_identifier: e.target.value,
+                            })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Typ sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseData.case_type}
+                        onChange={(e) =>
+                            setCaseData({
+                                ...caseData,
+                                case_type: e.target.value,
+                            })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Opis sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseData.case_description}
+                        onChange={(e) =>
+                            setCaseData({
+                                ...caseData,
+                                case_description: e.target.value,
+                            })
+                        }
+                        required
+                    />
+                </div>
+                <div className="form-buttons-group">
+                    <button type="submit" className="form-button">
+                        Zaktualizuj sprawę
+                    </button>
+                    <button
+                        onClick={() => navigate("/cases")}
+                        className="form-button form-button-cancel"
+                    >
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 

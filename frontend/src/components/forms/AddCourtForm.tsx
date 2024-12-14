@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import api from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const AddCourtForm: React.FC = () => {
+    const navigate = useNavigate();
+
     const [name, setName] = useState("");
     const [seat, setSeat] = useState("");
     const [courtType, setCourtType] = useState("");
@@ -17,36 +20,52 @@ const AddCourtForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Nazwa sądu:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Siedziba sądu:</label>
-                <input
-                    type="text"
-                    value={seat}
-                    onChange={(e) => setSeat(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Typ sądu:</label>
-                <input
-                    type="text"
-                    value={courtType}
-                    onChange={(e) => setCourtType(e.target.value)}
-                    required
-                />
-            </div>
-            <button type="submit">Dodaj sąd</button>
-        </form>
+        <div className="form-wrapper">
+            <h1>Dodaj sąd</h1>
+            <form className="form-container" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Nazwa sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Siedziba sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={seat}
+                        onChange={(e) => setSeat(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Typ sądu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={courtType}
+                        onChange={(e) => setCourtType(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-buttons-group">
+                    <button type="submit" className="form-button">
+                        Dodaj sąd
+                    </button>
+                    <button
+                        onClick={() => navigate("/courts")}
+                        className="form-button form-button-cancel"
+                    >
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 

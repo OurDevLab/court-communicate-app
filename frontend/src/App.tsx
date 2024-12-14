@@ -71,9 +71,9 @@ const App: React.FC = () => {
                 />
                 <Route path="/users/edit/:id" element={<UpdateUserForm />} />
 
-                <Route path="/court/preview/:id" element={<CourtPreview />} />
-                <Route path="/case/preview/:id" element={<CasePreview />} />
-                <Route path="/user/preview/:id" element={<UserPreview />} />
+                <Route path="/courts/preview/:id" element={<CourtPreview />} />
+                <Route path="/cases/preview/:id" element={<CasePreview />} />
+                <Route path="/users/preview/:id" element={<UserPreview />} />
 
                 {/* <Route path="/documents/cassation/add/" element={<AddCassationForm />} />
                 <Route path="/documents/cassation/edit/" element={<AddCassationForm />} />

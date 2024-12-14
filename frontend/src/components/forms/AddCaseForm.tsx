@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import api from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const AddCaseForm: React.FC = () => {
+    const navigate = useNavigate();
+
     const [caseIdentifier, setCaseIdentifier] = useState("");
     const [caseType, setCaseType] = useState("");
     const [caseDescription, setCaseDescription] = useState("");
@@ -21,36 +24,52 @@ const AddCaseForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Identyfikator sprawy:</label>
-                <input
-                    type="text"
-                    value={caseIdentifier}
-                    onChange={(e) => setCaseIdentifier(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Typ sprawy:</label>
-                <input
-                    type="text"
-                    value={caseType}
-                    onChange={(e) => setCaseType(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Opis sprawy:</label>
-                <input
-                    type="text"
-                    value={caseDescription}
-                    onChange={(e) => setCaseDescription(e.target.value)}
-                    required
-                />
-            </div>
-            <button type="submit">Dodaj sprawę</button>
-        </form>
+        <div className="form-wrapper">
+            <h1>Dodaj sprawę</h1>
+            <form className="form-container" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Sygnatura sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseIdentifier}
+                        onChange={(e) => setCaseIdentifier(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Typ sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseType}
+                        onChange={(e) => setCaseType(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Opis sprawy:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={caseDescription}
+                        onChange={(e) => setCaseDescription(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-buttons-group">
+                    <button type="submit" className="form-button">
+                        Dodaj sprawę
+                    </button>
+                    <button
+                        onClick={() => navigate("/cases")}
+                        className="form-button form-button-cancel"
+                    >
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 

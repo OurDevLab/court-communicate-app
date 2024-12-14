@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import api from "../../api";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const AddDepartmentForm: React.FC = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
 
     const [name, setName] = useState("");
@@ -22,27 +23,46 @@ const AddDepartmentForm: React.FC = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Nazwa departamentu:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Sąd:</label>
-                <input
-                    type="number"
-                    value={courtId || ""}
-                    onChange={(e) => setCourtId(Number(e.target.value))}
-                    required
-                />
-            </div>
-            <button type="submit">Dodaj departament</button>
-        </form>
+        <div className="form-wrapper">
+            <h1>Dodaj departament</h1>
+            <form className="form-container" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label>Nazwa departamentu:</label>
+                    <input
+                        type="text"
+                        className="form-input"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Sąd:</label>
+                    <input
+                        type="number"
+                        className="form-input"
+                        value={courtId || ""}
+                        onChange={(e) => setCourtId(Number(e.target.value))}
+                        required
+                    />
+                </div>
+                <div className="form-buttons-group">
+                    <button type="submit" className="form-button">
+                        Dodaj departament
+                    </button>
+                    <button
+                        onClick={() =>
+                            id
+                                ? navigate(`/courts/${id}/departments`)
+                                : navigate("/")
+                        }
+                        className="form-button form-button-cancel"
+                    >
+                        Anuluj
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 
