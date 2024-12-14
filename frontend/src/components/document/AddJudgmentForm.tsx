@@ -1,11 +1,15 @@
-import { useState } from "react";
-//import axios from "axios";
+import { useState, useEffect, FormEvent } from "react";
+import axios from "axios";
 
-
-//Cuda z API
-interface Props {
-    onDocumentAdded: (data) => void;
+interface Court {
+    id: number;
+    name: string;
 }
+
+interface Props {
+    onDocumentAdded: (data: any) => void;
+}
+
 const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
     const [formData, setFormData] = useState({
         location: "",
@@ -18,19 +22,48 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
         courtJugment: "",
         justification: "",
         signature: "",
+        court: "",
     });
 
-    const handleChange = (e) => {
+    const [courts, setCourts] = useState<Court[]>([]);
+
+    // Fetch courts data from the API
+    useEffect(() => {
+        async function fetchCourts() {
+            try {
+                const response = await axios.get("/api/courts"); // Adjust the API endpoint if needed
+                setCourts(response.data);
+            } catch (error) {
+                console.error("Failed to fetch courts", error);
+            }
+        }
+
+        fetchCourts();
+    }, []);
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    function handleSumbit(event: FormEvent<HTMLFormElement>): void {
-        throw new Error("Function not implemented.");
-    }
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("/api/documents", formData); // Adjust the API endpoint if needed
+            if (response.status === 201) {
+                onDocumentAdded(response.data);
+                alert("Dokument został dodany.");
+            }
+        } catch (error) {
+            console.error("Błąd podczas dodawania dokumentu", error);
+            alert("Nie udało się dodać dokumentu.");
+        }
+    };
 
     return (
-        <form className="form-container" onSubmit={handleSumbit}>
+        <form className="form-container" onSubmit={handleSubmit}>
             <div className="form-group">
                 <label htmlFor="location">Miejscowość</label>
                 <input
@@ -84,28 +117,23 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
                 />
             </div>
 
-            {/* 
-                Nie za bardzo ogarniam, żeby zrozumieć nawet to co mi podpowiedział chatGPT, dlatego zostawiam do w komentarzu
-                szczególnie, że wymaga to zakodownia połączenia do API, co niby też czat pokazał, ale no... znajomość języka :)
-
-                <div className="form-group">
-                <label htmlFor="court">Wybierz sąd:</label>
+            <div className="form-group">
+                <label htmlFor="court">Wybierz sąd</label>
                 <select
                     id="court"
                     name="court"
-                    //value={selectedCourt} 
-                    //onChange={handleChange}
+                    value={formData.court}
+                    onChange={handleChange}
                     className="form-input"
                 >
-                    <option value="" disabled>Wybierz...</option>
+                    <option value="">Wybierz sąd</option>
                     {courts.map((court) => (
-                        <option key={court.id} value={court.id}>
+                        <option key={court.id} value={court.name}>
                             {court.name}
                         </option>
                     ))}
                 </select>
-            <p>Wybrany sąd: {selectedCourt}</p>
-            </div>*/}
+            </div>
 
             <div className="form-group">
                 <label htmlFor="judge">Wpisz skład sądu</label>
@@ -193,3 +221,5 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
         </form>
     );
 };
+
+export default AddCassationForm;
