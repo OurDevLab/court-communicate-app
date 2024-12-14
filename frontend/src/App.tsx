@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { Login, Register, Dashboard } from "./components/auth";
+import { Login, Register } from "./components/auth";
 import { CasesPage, AddCaseForm } from "./components/case";
 import {
     CourtsPage,
@@ -18,15 +18,16 @@ import {
 import { UpdateMessageForm, DeleteMessageButton } from "./components/message";
 import { UsersPage, AddUserForm } from "./components/user";
 import { Chat } from "./components/chat";
+import { Dashboard } from "./components/dashboard";
 
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Chat />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/chat" element={<Chat />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/users" element={<UsersPage />} />
                 <Route path="/users/add" element={<AddUserForm />} />
                 <Route path="/cases" element={<CasesPage />} />
