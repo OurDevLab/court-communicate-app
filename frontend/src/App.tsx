@@ -1,18 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { Login, Register } from "./components/auth";
-import { AddCaseForm, CasePreview, UpdateCaseForm } from "./components/case";
 import {
+    LoginForm,
+    RegisterForm,
+    AddCaseForm,
     AddCourtForm,
-    CourtPreview,
-    UpdateCourtForm,
-} from "./components/court";
-import { AddUserForm, UpdateUserForm, UserPreview } from "./components/user";
-import {
     AddDepartmentForm,
+    AddUserForm,
+    UpdateCaseForm,
+    UpdateCourtForm,
     UpdateDepartmentForm,
-} from "./components/department";
+    UpdateUserForm,
+    CasePreview,
+    CourtPreview,
+    UserPreview,
+} from "./components/forms";
 
 import { Chat } from "./components/chat";
 
@@ -20,10 +23,17 @@ import {
     CasesList,
     CourtsList,
     Dashboard,
+    DepartmentsList,
     DocumentsPanel,
     UsersList,
 } from "./components/dashboard";
-import DepartmentsList from "./components/dashboard/DepartmentsList";
+
+// import {
+//     AddCassationForm,
+//     ComplaintForm,
+//     JudgmentForm,
+//     OrdinanceForm,
+// } from "./components/document";
 
 const App: React.FC = () => {
     return (
@@ -40,8 +50,8 @@ const App: React.FC = () => {
                 />
                 <Route path="/chat" element={<Chat />} />
 
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegisterForm />} />
 
                 <Route path="/users/add" element={<AddUserForm />} />
                 <Route path="/cases/add" element={<AddCaseForm />} />
@@ -64,6 +74,12 @@ const App: React.FC = () => {
                 <Route path="/court/preview/:id" element={<CourtPreview />} />
                 <Route path="/case/preview/:id" element={<CasePreview />} />
                 <Route path="/user/preview/:id" element={<UserPreview />} />
+
+                {/* <Route path="/documents/cassation/add/" element={<AddCassationForm />} />
+                <Route path="/documents/cassation/edit/" element={<AddCassationForm />} />
+                <Route path="/documents/complaint/add" element={<ComplaintForm />} />
+                <Route path="/documents/judgment/add" element={<JudgmentForm />} />
+                <Route path="/documents/ordinance/add" element={<OrdinanceForm />} /> */}
             </Routes>
         </Router>
     );
