@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../api";
 
 interface Props {
     messages;
@@ -26,7 +26,7 @@ const ChatMessageBox: React.FC<Props> = ({ messages, userId, inputRef }) => {
                                     <a
                                         target="_blank"
                                         rel="noreferrer"
-                                        href={`${axios.defaults.baseURL}/uploads/${message.file}`}
+                                        href={`${api.defaults.baseURL}/uploads/${message.file}`}
                                     >
                                         {message.file}
                                     </a>

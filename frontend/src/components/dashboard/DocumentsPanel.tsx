@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Navigation from "./Navigation";
+import { Navigation } from ".";
 
 const DocumentsPanel: React.FC = () => {
     const navigate = useNavigate();

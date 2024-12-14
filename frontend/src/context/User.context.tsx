@@ -1,5 +1,5 @@
-import axios from "axios";
 import { createContext, useEffect, useState, ReactNode } from "react";
+import api from "../api";
 
 interface UserContextType {
     username: string | null;
@@ -20,7 +20,7 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     const [id, setId] = useState<number | null>(null);
 
     useEffect(() => {
-        axios.get("/profile").then((response) => {
+        api.get("/profile").then((response) => {
             setId(response.data.userId);
             setUsername(response.data.username);
         });

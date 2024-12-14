@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const CasePreview: React.FC = () => {
     const navigate = useNavigate();
@@ -13,7 +13,7 @@ const CasePreview: React.FC = () => {
     useEffect(() => {
         const fetchCase = async () => {
             try {
-                const response = await axios.get(`/cases/${caseId}`);
+                const response = await api.get(`/cases/${caseId}`);
                 setCaseData(response.data);
             } catch (err) {
                 setError(

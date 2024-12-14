@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const UserPreview: React.FC = () => {
     const { id: userId } = useParams();
@@ -11,7 +11,7 @@ const UserPreview: React.FC = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get(`/users/${userId}`);
+                const response = await api.get(`/users/${userId}`);
                 setUser(response.data);
             } catch (err) {
                 setError(

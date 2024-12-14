@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const CourtPreview: React.FC = () => {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ const CourtPreview: React.FC = () => {
     useEffect(() => {
         const fetchCourt = async () => {
             try {
-                const response = await axios.get(`/courts/${id}`);
+                const response = await api.get(`/courts/${id}`);
                 setCourt(response.data);
             } catch (err) {
                 setError("Wystąpił błąd podczas pobierania danych sądu:" + err);

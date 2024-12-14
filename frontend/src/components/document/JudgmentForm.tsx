@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent } from "react";
-import axios from "axios";
+import api from "../../api";
 
 interface Court {
     id: number;
@@ -27,11 +27,10 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
 
     const [courts, setCourts] = useState<Court[]>([]);
 
-    // Fetch courts data from the API
     useEffect(() => {
         async function fetchCourts() {
             try {
-                const response = await axios.get("/api/courts"); // Adjust the API endpoint if needed
+                const response = await api.get("/api/courts");
                 setCourts(response.data);
             } catch (error) {
                 console.error("Failed to fetch courts", error);
@@ -51,7 +50,7 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/documents", formData); // Adjust the API endpoint if needed
+            const response = await api.post("/api/documents", formData);
             if (response.status === 201) {
                 onDocumentAdded(response.data);
                 alert("Dokument został dodany.");

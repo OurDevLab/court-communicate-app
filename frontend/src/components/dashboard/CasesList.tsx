@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { isArray } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 import { Navigation } from ".";
+import api from "../../api";
 
 const CasesList: React.FC = () => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const CasesList: React.FC = () => {
     const fetchCases = async () => {
         try {
             setLoading(true);
-            const response = await axios.get("/cases");
+            const response = await api.get("/cases");
             setCases(response.data);
         } catch (err) {
             setError("Błąd podczas pobierania spraw:" + err);
@@ -26,7 +26,7 @@ const CasesList: React.FC = () => {
 
     const deleteCase = async (caseId: number) => {
         if (window.confirm("Czy na pewno chcesz usunąć tę sprawę?")) {
-            await axios
+            await api
                 .delete(`/cases/${caseId}`)
                 .then(() => {
                     setCases((prevCases) =>

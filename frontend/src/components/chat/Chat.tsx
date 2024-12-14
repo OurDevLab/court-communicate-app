@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../context/User.context";
 import { isArray, uniqBy } from "lodash";
-import axios from "axios";
 
 import {
     SidebarContent,
@@ -10,10 +9,9 @@ import {
     ChatMessageBox,
     ChatForm,
 } from ".";
+import api from "../../api";
 
-interface Props {}
-
-const Chat: React.FC<Props> = () => {
+const Chat: React.FC = () => {
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [cases, setCases] = useState([]);
     const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
@@ -40,7 +38,7 @@ const Chat: React.FC<Props> = () => {
 
     async function fetchCases() {
         try {
-            const res = await axios.get(`/cases`);
+            const res = await api.get(`/cases`);
             if (isArray(cases)) setCases(res.data);
         } catch (error) {
             console.error("Błąd podczas pobierania spraw:", error);
@@ -55,7 +53,7 @@ const Chat: React.FC<Props> = () => {
 
     async function fetchMessages() {
         try {
-            const res = await axios.get(`/messages/${selectedCaseId}`);
+            const res = await api.get(`/messages/${selectedCaseId}`);
             setMessages(res.data);
         } catch (error) {
             console.error("Błąd podczas pobierania wiadomości:", error);
@@ -109,7 +107,7 @@ const Chat: React.FC<Props> = () => {
     }
 
     function logout() {
-        axios.post("/logout").then(() => {
+        api.post("/logout").then(() => {
             setWs(null);
             setId(null);
             setUsername(null);
@@ -121,6 +119,10 @@ const Chat: React.FC<Props> = () => {
     }, [messages]);
 
     const messagesWithoutDupes = uniqBy(messages, "_id");
+
+
+    console.log(cases);
+    console.log(cases.length);
 
     if (cases && cases.length)
         return (

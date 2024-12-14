@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
+import api from "../../api";
 
 interface Props {
     onOrdinanceSaved: (data) => void;
@@ -21,7 +21,7 @@ const OrdinanceForm: React.FC<Props> = ({ onOrdinanceSaved }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`/ordinances`, formData);
+            const response = await api.post(`/ordinances`, formData);
             if (response.status === 201) {
                 onOrdinanceSaved(response.data);
                 alert("Zarządzenie zostało zapisane.");

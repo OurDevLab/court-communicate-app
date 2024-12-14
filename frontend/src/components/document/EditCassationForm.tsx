@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 interface Props {
     documentData: {
@@ -38,7 +38,7 @@ const EditCassationForm: React.FC<Props> = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
+            const response = await api.put(
                 `/documents/${documentData.documentId}`,
                 formData
             );

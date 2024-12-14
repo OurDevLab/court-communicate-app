@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 interface Props {
     onComplaintSubmitted: (data) => void;
@@ -22,7 +22,7 @@ const ComplaintForm: React.FC<Props> = ({ onComplaintSubmitted }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`/complaints`, formData);
+            const response = await api.post(`/complaints`, formData);
             if (response.status === 201) {
                 onComplaintSubmitted(response.data);
                 alert("Skarga została przesłana.");

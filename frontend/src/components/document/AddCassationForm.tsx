@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 interface Props {
     caseId: number;
@@ -34,7 +34,7 @@ const AddCassationForm: React.FC<Props> = ({ caseId, onDocumentAdded }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
+            const response = await api.post(
                 `/cases/${caseId}/documents`,
                 formData
             );

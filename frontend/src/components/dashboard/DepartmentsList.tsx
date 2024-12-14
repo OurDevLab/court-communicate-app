@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api";
 
 const DepartmentsList: React.FC = () => {
     const { id: courtId } = useParams();
@@ -12,7 +12,7 @@ const DepartmentsList: React.FC = () => {
 
     const fetchDepartments = async () => {
         try {
-            const response = await axios.get(`/departments/byCourt/${courtId}`);
+            const response = await api.get(`/departments/byCourt/${courtId}`);
             setDepartments(response.data);
         } catch (err) {
             setError("Błąd podczas pobierania departamentów:");
@@ -24,7 +24,7 @@ const DepartmentsList: React.FC = () => {
     const deleteDepartment = async (departmentId: number) => {
         if (window.confirm("Czy na pewno chcesz usunąć ten departament?")) {
             try {
-                await axios.delete(`/departments/${departmentId}`);
+                await api.delete(`/departments/${departmentId}`);
                 alert("Departament został usunięty");
                 setDepartments((prev) =>
                     prev.filter((department) => department.id !== departmentId)
@@ -44,7 +44,7 @@ const DepartmentsList: React.FC = () => {
 
     return (
         <div className="container">
-            <button onClick={() => navigate(`/courts/${courtId}`)}>
+            <button onClick={() => navigate(`/courts/preview/${courtId}`)}>
                 Wróć do podglądu sądu
             </button>
             <h1>Struktura organizacyjna sądu</h1>
