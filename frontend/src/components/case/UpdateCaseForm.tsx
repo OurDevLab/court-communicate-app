@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
+import { useParams } from "react-router-dom";
 
-interface Props {
-    caseId: number;
-}
+const UpdateCaseForm: React.FC = () => {
+    const { id: caseId } = useParams();
 
-const UpdateCaseForm: React.FC<Props> = ({ caseId }) => {
     const [caseData, setCaseData] = useState({
         case_identifier: "",
         case_type: "",

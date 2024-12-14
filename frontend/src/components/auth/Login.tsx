@@ -13,7 +13,7 @@ const Login: React.FC = () => {
             const response = await api.post("/login", { login, password });
             localStorage.setItem("token", response.data.token);
             alert("Zalogowano pomyślnie");
-            navigate("/dashboard"); // Przekierowanie na chronioną stronę
+            navigate("/");
         } catch (error) {
             alert("Błąd podczas logowania");
         }

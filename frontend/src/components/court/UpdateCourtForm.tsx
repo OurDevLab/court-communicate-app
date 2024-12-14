@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
+import { useParams } from "react-router-dom";
 
-interface Props {
-    courtId: number;
-}
+const UpdateCourtForm: React.FC = () => {
+    const { id: courtId } = useParams();
 
-const UpdateCourtForm: React.FC<Props> = ({ courtId }) => {
     const [court, setCourt] = useState({
         name: "",
         seat: "",
@@ -13,7 +12,6 @@ const UpdateCourtForm: React.FC<Props> = ({ courtId }) => {
     });
 
     useEffect(() => {
-        // Pobierz istniejący sąd
         api.get(`/courts/${courtId}`)
             .then((response) => setCourt(response.data))
             .catch((error) =>

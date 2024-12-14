@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
+import { useParams } from "react-router-dom";
 
-interface Props {
-    userId: number;
-}
+const UpdateUserForm: React.FC = () => {
+    const { id: userId } = useParams();
 
-const UpdateUserForm: React.FC<Props> = ({ userId }) => {
     const [user, setUser] = useState({
         login: "",
         name: "",

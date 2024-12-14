@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import api from "../../api";
+import { useParams } from "react-router-dom";
 
-interface Props {
-    departmentId: number;
-}
+const UpdateDepartmentForm: React.FC = () => {
+    const { id: departmentId } = useParams();
 
-const UpdateDepartmentForm: React.FC<Props> = ({ departmentId }) => {
     const [department, setDepartment] = useState({ name: "", court_id: -1 });
 
     useEffect(() => {
-        // Pobierz istniejący departament
         api.get(`/departments/${departmentId}`)
             .then((response) => setDepartment(response.data))
             .catch((error) =>
