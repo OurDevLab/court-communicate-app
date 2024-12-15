@@ -1,0 +1,19 @@
+{
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage",
+    "testMatch": ["**/?(*.)+(spec|test).ts"],
+    "moduleFileExtensions": ["ts", "js", "json"],
+    "transform": {
+        "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "transformIgnorePatterns": ["<rootDir>/node_modules/"],
+    "moduleNameMapper": {
+        "^src/(.*)$": "<rootDir>/src/$1"
+    },
+    "globals": {
+        "ts-jest": {
+            "isolatedModules": true
+        }
+    }
+}
