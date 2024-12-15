@@ -33,7 +33,7 @@ const CourtPreview: React.FC = () => {
             </button>
             <h1>{court.name}</h1>
             <p>Typ: {court.type}</p>
-            <p>Adres: {court.address}</p>
+            <p>Adres: {court.seat}</p>
             <button onClick={() => navigate(`/courts/${id}/departments`)}>
                 Struktura organizacyjna
             </button>

@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
+import { isArray } from "lodash";
 
 const DepartmentsList: React.FC = () => {
     const { id: courtId } = useParams();
@@ -47,24 +48,32 @@ const DepartmentsList: React.FC = () => {
             <button onClick={() => navigate(`/courts/preview/${courtId}`)}>
                 Wróć do podglądu sądu
             </button>
-            <h1>Struktura organizacyjna sądu</h1>
-            <button onClick={() => navigate(`/departments/add/${courtId}`)}>
+            <h1 className="header">Struktura organizacyjna</h1>
+            <button className="add-button" onClick={() => navigate(`/departments/add/${courtId}`)}>
                 Dodaj departament
             </button>
-            <ul>
-                {departments.map((department) => (
-                    <li key={department.id}>
+            <ul className="list">
+                {isArray(departments) && departments.map((department) => (
+                    <li key={department.id} className="list-item">
                         <strong>{department.name}</strong>
-                        <button
-                            onClick={() =>
-                                navigate(`/departments/edit/${department.id}`)
-                            }
-                        >
-                            Edytuj
-                        </button>
-                        <button onClick={() => deleteDepartment(department.id)}>
-                            Usuń
-                        </button>
+                        <div className="actions">
+                            <button
+                                className="edit-button"
+                                onClick={() =>
+                                    navigate(`/departments/edit/${department.id}`)
+                                }
+                            >
+                                Edytuj
+                            </button>
+                            <button 
+                                className="delete-button" 
+                                onClick={() => 
+                                    deleteDepartment(department.id)
+                                }
+                            >
+                                Usuń
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>

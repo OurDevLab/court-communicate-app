@@ -63,16 +63,16 @@ const CasesList: React.FC = () => {
                 )}
                 {isArray(cases) &&
                     cases.map((caseItem) => (
-                        <li key={caseItem.id} className="list-item">
+                        <li key={caseItem.case_id} className="list-item">
                             <div>
-                                <strong>{caseItem.title}</strong> -{" "}
-                                {caseItem.status}
+                                <strong>{caseItem.case_identifier}</strong> -{" "}
+                                {caseItem.case_description}
                             </div>
                             <div className="actions">
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`cases/preview/${caseItem.id}`)
+                                        navigate(`cases/preview/${caseItem.case_id}`)
                                     }
                                 >
                                     Zobacz
@@ -80,14 +80,14 @@ const CasesList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`/cases/edit/${caseItem.id}`)
+                                        navigate(`/cases/edit/${caseItem.case_id}`)
                                     }
                                 >
                                     Edytuj
                                 </button>
                                 <button
                                     className="delete-button"
-                                    onClick={() => deleteCase(caseItem.id)}
+                                    onClick={() => deleteCase(caseItem.case_id)}
                                 >
                                     Usuń
                                 </button>
