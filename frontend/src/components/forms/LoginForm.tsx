@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import api from "../../api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
@@ -12,14 +12,21 @@ const LoginForm: React.FC = () => {
         e.preventDefault();
         try {
             const response = await api.post("/login", { login, password });
-            localStorage.setItem("token", response.data.token);
-            alert("Zalogowano pomyślnie");
-            navigate("/");
+    
+            const { token } = response.data;
+            if (token) {
+                localStorage.setItem("token", token);
+                alert(response.data.message);
+                navigate("/");
+            } else {
+                alert("Brak tokena w odpowiedzi serwera.");
+            }
         } catch (error) {
+            console.error("Błąd podczas logowania:", error);
             alert("Błąd podczas logowania");
         }
     };
-
+    
     return (
         <div className="form-wrapper">
             <h1>Zaloguj się</h1>
@@ -47,6 +54,7 @@ const LoginForm: React.FC = () => {
                 <button type="submit" className="form-button">
                     Zaloguj się
                 </button>
+                <p>Nie masz konta? Skorzystaj z <Link to="/register">formularza rejestracji</Link></p>
             </form>
         </div>
     );

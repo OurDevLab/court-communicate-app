@@ -43,14 +43,14 @@ class AuthService {
         return await prisma.user.findUnique({ where: { login } });
     }
 
-    async generateToken({
+    generateToken({
         id,
         role,
         key,
         expiresIn,
-    }: AuthModel.GenerateTokenData): Promise<AuthModel.Token> {
+    }: AuthModel.GenerateTokenData): AuthModel.Token {
         return jwt.sign({ id, role }, key, { expiresIn });
-    }
+    }    
 }
 
 export default AuthService;

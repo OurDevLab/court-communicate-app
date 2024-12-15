@@ -1,5 +1,12 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
-import api from "../api";
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    id: number;
+    username: string;
+    role: string;
+    exp: number;
+}
 
 interface UserContextType {
     username: string | null;
@@ -20,27 +27,28 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     const [id, setId] = useState<number | null>(null);
 
     useEffect(() => {
-        api.get("/profile").then((response) => {
-            setId(response.data.userId);
-            setUsername(response.data.username);
-        });
-    }, []);
-
-    useEffect(() => {
-        const fetchProfile = async () => {
+        const token = localStorage.getItem("token");
+        console.log(token);
+        if (token) {
             try {
-                const response = await api.get("/profile");
-                setId(response.data.userId);
-                setUsername(response.data.username);
+                const decoded: DecodedToken = jwtDecode(token);
+
+                console.log(decoded);
+
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (decoded.exp < currentTime) {
+                    throw new Error("Token expired");
+                }
+
+                setId(decoded.id);
+                setUsername(decoded.username);
             } catch (error) {
-                console.error("Błąd walidacji tokena:", error);
+                console.error("Token validation error:", error);
                 setId(null);
                 setUsername(null);
                 localStorage.removeItem("token");
             }
-        };
-    
-        fetchProfile();
+        }
     }, []);
 
     return (
