@@ -3,9 +3,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { UserContext } from "./context/User.context";
 
 const PrivateRoute: React.FC = () => {
-    const { username } = useContext(UserContext);
+    const { id } = useContext(UserContext);
 
-    return username ? <Outlet /> : <Navigate to="/login" />;
+    return id ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
