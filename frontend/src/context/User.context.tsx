@@ -26,6 +26,23 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         });
     }, []);
 
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await api.get("/profile");
+                setId(response.data.userId);
+                setUsername(response.data.username);
+            } catch (error) {
+                console.error("Błąd walidacji tokena:", error);
+                setId(null);
+                setUsername(null);
+                localStorage.removeItem("token");
+            }
+        };
+    
+        fetchProfile();
+    }, []);
+
     return (
         <UserContext.Provider value={{ username, setUsername, id, setId }}>
             {children}

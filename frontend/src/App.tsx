@@ -35,10 +35,17 @@ import {
 //     OrdinanceForm,
 // } from "./components/document";
 
+import { PrivateRoute } from ".";
+
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
+
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegisterForm />} />
+
+            <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/courts" element={<CourtsList />} />
                 <Route path="/cases" element={<CasesList />} />
@@ -49,9 +56,6 @@ const App: React.FC = () => {
                     element={<DepartmentsList />}
                 />
                 <Route path="/chat" element={<Chat />} />
-
-                <Route path="/login" element={<LoginForm />} />
-                <Route path="/register" element={<RegisterForm />} />
 
                 <Route path="/users/add" element={<AddUserForm />} />
                 <Route path="/cases/add" element={<AddCaseForm />} />
@@ -80,6 +84,7 @@ const App: React.FC = () => {
                 <Route path="/documents/complaint/add" element={<ComplaintForm />} />
                 <Route path="/documents/judgment/add" element={<JudgmentForm />} />
                 <Route path="/documents/ordinance/add" element={<OrdinanceForm />} /> */}
+            </Route>
             </Routes>
         </Router>
     );
