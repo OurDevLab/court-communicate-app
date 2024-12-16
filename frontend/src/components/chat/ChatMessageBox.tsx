@@ -12,7 +12,7 @@ const ChatMessageBox: React.FC<Props> = ({ messages, userId, inputRef }) => {
             <div className="overflow-y-scroll chat-messages">
                 {messages.map((message) => (
                     <div
-                        key={message._id}
+                        key={message.id}
                         className={`message ${
                             message.senderId === userId
                                 ? "message-sent"

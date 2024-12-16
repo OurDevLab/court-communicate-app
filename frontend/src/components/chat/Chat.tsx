@@ -24,6 +24,8 @@ const Chat: React.FC = () => {
     const { id, username, setId, setUsername } = useContext(UserContext);
     const divUnderMessages = useRef<HTMLDivElement>(null);
 
+    console.log(id);
+
     useEffect(() => {
         connectToWs();
     }, []);
@@ -57,7 +59,7 @@ const Chat: React.FC = () => {
 
     async function fetchMessages() {
         try {
-            const res = await api.get(`/messages/${selectedCaseId}`);
+            const res = await api.get(`/messages/case/${selectedCaseId}`);
             setMessages(res.data);
         } catch (error) {
             console.error("Błąd podczas pobierania listy wiadomości:", error);
@@ -127,7 +129,9 @@ const Chat: React.FC = () => {
         divUnderMessages.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const messagesWithoutDupes = uniqBy(messages, "_id");
+    const messagesWithoutDupes = uniqBy(messages, "id");
+
+    console.log(messagesWithoutDupes);
 
     return (
         <div className="container">
