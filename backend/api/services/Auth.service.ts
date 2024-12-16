@@ -48,8 +48,9 @@ class AuthService {
         role,
         key,
         expiresIn,
+        username
     }: AuthModel.GenerateTokenData): AuthModel.Token {
-        return jwt.sign({ id, role }, key, { expiresIn });
+        return jwt.sign({ id, role, username }, key, { expiresIn });
     }    
 }
 

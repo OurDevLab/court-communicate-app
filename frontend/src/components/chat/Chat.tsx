@@ -13,8 +13,11 @@ import {
 } from ".";
 import api from "../../api";
 import { Navigation } from "../dashboard";
+import { useNavigate } from "react-router-dom";
 
 const Chat: React.FC = () => {
+    const navigate = useNavigate();
+
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [cases, setCases] = useState([]);
     const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
@@ -57,7 +60,7 @@ const Chat: React.FC = () => {
 
     async function fetchMessages() {
         try {
-            const res = await api.get(`/messages/${selectedCaseId}`);
+            const res = await api.get(`/messages/case/${selectedCaseId}`);
             setMessages(res.data);
         } catch (error) {
             console.error("Błąd podczas pobierania listy wiadomości:", error);
@@ -116,18 +119,17 @@ const Chat: React.FC = () => {
     }
 
     function logout() {
-        api.post("/logout").then(() => {
-            setWs(null);
-            setId(null);
-            setUsername(null);
-        });
+        setId(null);
+        setUsername(null);
+        localStorage.removeItem("token");
+        navigate("/login");
     }
 
     useEffect(() => {
         divUnderMessages.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const messagesWithoutDupes = uniqBy(messages, "_id");
+    const messagesWithoutDupes = uniqBy(messages, "id");
 
     return (
         <div className="container">

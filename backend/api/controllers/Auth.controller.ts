@@ -70,6 +70,7 @@ class AuthController {
                 role: user.role,
                 key: jwtSecret,
                 expiresIn: jwtExpiration,
+                username: user.login
             });
 
             if (token) {

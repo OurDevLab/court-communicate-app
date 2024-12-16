@@ -14,6 +14,7 @@ const AddCourtForm: React.FC = () => {
         try {
             await api.post("/courts", { name, seat, court_type: courtType });
             alert("Sąd został dodany");
+            navigate("/courts");
         } catch (error) {
             console.error("Błąd podczas dodawania sądu:", error);
         }
