@@ -18,6 +18,7 @@ const AddCaseForm: React.FC = () => {
                 case_description: caseDescription,
             });
             alert("Sprawa została dodana");
+            navigate("/cases");
         } catch (error) {
             console.error("Błąd podczas dodawania sprawy:", error);
         }

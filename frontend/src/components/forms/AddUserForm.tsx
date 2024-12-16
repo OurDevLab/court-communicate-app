@@ -14,7 +14,10 @@ const AddUserForm: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         api.post("/users", { login, password, name, surname, role })
-            .then(() => alert("Użytkownik został dodany"))
+            .then(() => {
+                alert("Użytkownik został dodany");
+                navigate("/users");
+            })
             .catch((error) =>
                 console.error("Błąd podczas dodawania użytkownika:", error)
             );
