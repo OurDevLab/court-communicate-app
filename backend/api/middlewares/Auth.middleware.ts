@@ -1,15 +1,7 @@
-// import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
 import { ConfigVariables } from "../../config";
 const { jwtSecret } = ConfigVariables;
-
-// export interface AuthenticatedRequest extends Request {
-//     user?: {
-//         userId: number;
-//         role: string;
-//     };
-// }
 
 const authenticateToken = (
     // req: AuthenticatedRequest,

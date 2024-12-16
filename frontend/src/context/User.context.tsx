@@ -26,20 +26,15 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     const [username, setUsername] = useState<string | null>(null);
     const [id, setId] = useState<number | null>(null);
 
-    useEffect(() => {
+    const loadUserFromToken = () => {
         const token = localStorage.getItem("token");
-        console.log(token);
         if (token) {
             try {
                 const decoded: DecodedToken = jwtDecode(token);
-
-                console.log(decoded);
-
                 const currentTime = Math.floor(Date.now() / 1000);
                 if (decoded.exp < currentTime) {
                     throw new Error("Token expired");
                 }
-
                 setId(decoded.id);
                 setUsername(decoded.username);
             } catch (error) {
@@ -48,7 +43,25 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
                 setUsername(null);
                 localStorage.removeItem("token");
             }
+        } else {
+            setId(null);
+            setUsername(null);
         }
+    };
+
+    useEffect(() => {
+        loadUserFromToken();
+
+        const handleStorageChange = (event: StorageEvent) => {
+            if (event.key === "token") {
+                loadUserFromToken();
+            }
+        };
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
     }, []);
 
     return (
