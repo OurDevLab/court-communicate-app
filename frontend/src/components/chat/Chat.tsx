@@ -13,8 +13,11 @@ import {
 } from ".";
 import api from "../../api";
 import { Navigation } from "../dashboard";
+import { useNavigate } from "react-router-dom";
 
 const Chat: React.FC = () => {
+    const navigate = useNavigate();
+
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [cases, setCases] = useState([]);
     const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
@@ -23,8 +26,6 @@ const Chat: React.FC = () => {
 
     const { id, username, setId, setUsername } = useContext(UserContext);
     const divUnderMessages = useRef<HTMLDivElement>(null);
-
-    console.log(id);
 
     useEffect(() => {
         connectToWs();
@@ -118,11 +119,10 @@ const Chat: React.FC = () => {
     }
 
     function logout() {
-        api.post("/logout").then(() => {
-            setWs(null);
-            setId(null);
-            setUsername(null);
-        });
+        setId(null);
+        setUsername(null);
+        localStorage.removeItem("token");
+        navigate("/login");
     }
 
     useEffect(() => {
@@ -130,8 +130,6 @@ const Chat: React.FC = () => {
     }, [messages]);
 
     const messagesWithoutDupes = uniqBy(messages, "id");
-
-    console.log(messagesWithoutDupes);
 
     return (
         <div className="container">
