@@ -81,6 +81,29 @@ CREATE TABLE "CaseHistory" (
     CONSTRAINT "CaseHistory_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable: Document
+CREATE TABLE "Document" (
+    "id" SERIAL NOT NULL,
+    "caseId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "type" VARCHAR(50) NOT NULL,
+    "content" JSONB NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Document_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex for Document.caseId
+CREATE INDEX "Document_caseId_idx" ON "Document"("caseId");
+
+-- CreateIndex for Document.userId
+CREATE INDEX "Document_userId_idx" ON "Document"("userId");
+
+-- AddForeignKey for Document
+ALTER TABLE "Document" ADD CONSTRAINT "Document_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("case_id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Document" ADD CONSTRAINT "Document_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 -- UpdateTable: Message
 DROP TABLE IF EXISTS "Message";
 

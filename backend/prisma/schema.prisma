@@ -30,6 +30,8 @@ model User {
   CaseParty         CaseParty[]
   sentMessages      Message[]           @relation("MessageSender")
   receivedMessages  Message[]           @relation("MessageRecipient")
+
+  Document Document[]
 }
 
 model Case {
@@ -50,6 +52,8 @@ model Case {
   CaseHistory        CaseHistory[]
   Messages           Message[]
   CaseParty          CaseParty[]
+
+  Document Document[]
 }
 
 model Court {
@@ -100,6 +104,19 @@ model CaseHistory {
   status    String   @db.VarChar(50)
   timestamp DateTime @default(now())
   Case      Case     @relation(fields: [case_id], references: [case_id])
+}
+
+model Document {
+  id            Int      @id @default(autoincrement())
+  caseId        Int
+  userId        Int
+  type          String
+  content       Json
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  case          Case     @relation(fields: [caseId], references: [case_id])
+  user          User     @relation(fields: [userId], references: [user_id])
 }
 
 model Message {
