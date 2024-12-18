@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { isArray } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 import { Navigation } from ".";
+import api from "../../api";
 
 const UsersList: React.FC = () => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const UsersList: React.FC = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await axios.get("/users");
+            const response = await api.get("/users");
             setUsers(response.data);
         } catch (err) {
             setError("Błąd podczas pobierania użytkowników:" + err);
@@ -26,7 +26,7 @@ const UsersList: React.FC = () => {
 
     const deleteUser = async (userId: number) => {
         if (window.confirm("Czy na pewno chcesz usunąć tego użytkownika?")) {
-            await axios
+            await api
                 .delete(`/users/${userId}`)
                 .then(() => {
                     setUsers((prevUsers) =>

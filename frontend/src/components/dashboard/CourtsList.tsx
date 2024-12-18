@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { isArray } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 import { Navigation } from ".";
+import api from "../../api";
 
 const CourtsList: React.FC = () => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const CourtsList: React.FC = () => {
     const fetchCourts = async () => {
         try {
             setLoading(true);
-            const response = await axios.get("/courts");
+            const response = await api.get("/courts");
             setCourts(response.data);
         } catch (err) {
             setError("Błąd podczas pobierania sądów:" + err);
@@ -26,7 +26,7 @@ const CourtsList: React.FC = () => {
 
     const deleteCourt = async (courtId: number) => {
         if (window.confirm("Czy na pewno chcesz usunąć ten sąd?")) {
-            await axios
+            await api
                 .delete(`/courts/${courtId}`)
                 .then(() => {
                     setCourts((prevCourts) =>
@@ -64,7 +64,7 @@ const CourtsList: React.FC = () => {
                     courts.map((court) => (
                         <li key={court.id} className="list-item">
                             <div>
-                                <strong>{court.name}</strong> - {court.location}
+                                <strong>{court.name}</strong>
                             </div>
                             <div className="actions">
                                 <button
@@ -78,7 +78,7 @@ const CourtsList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`courts/edit/${court.id}`)
+                                        navigate(`/courts/edit/${court.id}`)
                                     }
                                 >
                                     Edytuj

@@ -233,69 +233,6 @@ button:focus-visible {
   background-color: #555;
 }
 
-/* toggle */
-
-.toggle-section {
-  display: flex;
-  flex-direction: column;
-
-  width: 95%;
-
-  margin-bottom: 20px;
-  border: 1px solid #232121;
-  border-radius: 8px;
-  background-color: #dad0d0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-section h3 {
-  color: #1a1a1a;
-}
-
-.toggle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  cursor: pointer;
-  background-color: #232121;
-}
-
-.toggle-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.toggle-header button {
-  border: none;
-  background: transparent;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.toggle-content {
-  padding: 20px;
-}
-
-.charts-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.charts-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pie-chart {
-  display: flex;
-  flex-direction: column;
-  max-width: 50%;
-}
-
 .chat-section {
   display: flex;
   flex-direction: column;
@@ -312,60 +249,9 @@ button:focus-visible {
   transition: background-color 0.3s;
 }
 
-.list-item-default {
-  background-color: #eaeaea;
-  color: #333;
-}
-
 .list-item-selected {
   background-color: #646cff;
   color: white;
-}
-
-.chat-messages {
-  background: #1a1a1a;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.message {
-  margin-bottom: 10px;
-}
-
-.message-sent {
-  text-align: right;
-  color: #0a84ff;
-}
-
-.message-received {
-  text-align: left;
-  color: #ffffff;
-}
-
-.message-content {
-  display: inline-block;
-  padding: 10px;
-  border-radius: 8px;
-  max-width: 60%;
-}
-
-.footer-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer-username {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #c0c0c0;
-  font-size: 0.9rem;
-}
-
-.footer-icon {
-  width: 16px;
-  height: 16px;
 }
 
 .dashboard-grid {
@@ -469,7 +355,7 @@ button:focus-visible {
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #f9f9f9;
+  background-color: #333;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

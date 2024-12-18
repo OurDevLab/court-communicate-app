@@ -1,18 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import { Login, Register } from "./components/auth";
-import { AddCaseForm, CasePreview, UpdateCaseForm } from "./components/case";
 import {
+    LoginForm,
+    RegisterForm,
+    AddCaseForm,
     AddCourtForm,
-    CourtPreview,
-    UpdateCourtForm,
-} from "./components/court";
-import { AddUserForm, UpdateUserForm, UserPreview } from "./components/user";
-import {
     AddDepartmentForm,
+    AddUserForm,
+    UpdateCaseForm,
+    UpdateCourtForm,
     UpdateDepartmentForm,
-} from "./components/department";
+    UpdateUserForm,
+    CasePreview,
+    CourtPreview,
+    UserPreview,
+} from "./components/forms";
 
 import { Chat } from "./components/chat";
 
@@ -20,52 +23,73 @@ import {
     CasesList,
     CourtsList,
     Dashboard,
+    DepartmentsList,
     DocumentsPanel,
     UsersList,
 } from "./components/dashboard";
-import DepartmentsList from "./components/dashboard/DepartmentsList";
+
+// import {
+//     AddCassationForm,
+//     ComplaintForm,
+//     JudgmentForm,
+//     OrdinanceForm,
+// } from "./components/document";
+
+import { PrivateRoute } from ".";
+import { UserContextProvider } from "./context/User.context";
 
 const App: React.FC = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/courts" element={<CourtsList />} />
-                <Route path="/cases" element={<CasesList />} />
-                <Route path="/users" element={<UsersList />} />
-                <Route path="/documents" element={<DocumentsPanel />} />
-                <Route
-                    path="/courts/:id/departments"
-                    element={<DepartmentsList />}
-                />
-                <Route path="/chat" element={<Chat />} />
+        <UserContextProvider>
+            <Router>
+                <Routes>
 
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/register" element={<RegisterForm />} />
 
-                <Route path="/users/add" element={<AddUserForm />} />
-                <Route path="/cases/add" element={<AddCaseForm />} />
-                <Route path="/courts/add" element={<AddCourtForm />} />
+                <Route element={<PrivateRoute />}>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/courts" element={<CourtsList />} />
+                    <Route path="/cases" element={<CasesList />} />
+                    <Route path="/users" element={<UsersList />} />
+                    <Route path="/documents" element={<DocumentsPanel />} />
+                    <Route
+                        path="/courts/:id/departments"
+                        element={<DepartmentsList />}
+                    />
+                    <Route path="/chat" element={<Chat />} />
 
-                <Route
-                    path="/departments/add"
-                    element={<AddDepartmentForm />}
-                />
+                    <Route path="/users/add" element={<AddUserForm />} />
+                    <Route path="/cases/add" element={<AddCaseForm />} />
+                    <Route path="/courts/add" element={<AddCourtForm />} />
 
-                <Route path="/cases/edit/:id" element={<UpdateCaseForm />} />
-                <Route path="/courts/:id" element={<UpdateCourtForm />} />
+                    <Route
+                        path="/departments/add"
+                        element={<AddDepartmentForm />}
+                    />
 
-                <Route
-                    path="/departments/edit/:id"
-                    element={<UpdateDepartmentForm />}
-                />
-                <Route path="/users/edit/:id" element={<UpdateUserForm />} />
+                    <Route path="/cases/edit/:id" element={<UpdateCaseForm />} />
+                    <Route path="/courts/edit/:id" element={<UpdateCourtForm />} />
 
-                <Route path="/court/preview/:id" element={<CourtPreview />} />
-                <Route path="/case/preview/:id" element={<CasePreview />} />
-                <Route path="/user/preview/:id" element={<UserPreview />} />
-            </Routes>
-        </Router>
+                    <Route
+                        path="/departments/edit/:id"
+                        element={<UpdateDepartmentForm />}
+                    />
+                    <Route path="/users/edit/:id" element={<UpdateUserForm />} />
+
+                    <Route path="/courts/preview/:id" element={<CourtPreview />} />
+                    <Route path="/cases/preview/:id" element={<CasePreview />} />
+                    <Route path="/users/preview/:id" element={<UserPreview />} />
+
+                    {/* <Route path="/documents/cassation/add/" element={<AddCassationForm />} />
+                    <Route path="/documents/cassation/edit/" element={<AddCassationForm />} />
+                    <Route path="/documents/complaint/add" element={<ComplaintForm />} />
+                    <Route path="/documents/judgment/add" element={<JudgmentForm />} />
+                    <Route path="/documents/ordinance/add" element={<OrdinanceForm />} /> */}
+                </Route>
+                </Routes>
+            </Router>
+        </UserContextProvider>
     );
 };
 

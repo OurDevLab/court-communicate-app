@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { isArray } from "lodash";
 import { useNavigate } from "react-router-dom";
 
 import { Navigation } from ".";
+import api from "../../api";
 
 const CasesList: React.FC = () => {
     const navigate = useNavigate();
@@ -15,7 +15,7 @@ const CasesList: React.FC = () => {
     const fetchCases = async () => {
         try {
             setLoading(true);
-            const response = await axios.get("/cases");
+            const response = await api.get("/cases");
             setCases(response.data);
         } catch (err) {
             setError("Błąd podczas pobierania spraw:" + err);
@@ -26,7 +26,7 @@ const CasesList: React.FC = () => {
 
     const deleteCase = async (caseId: number) => {
         if (window.confirm("Czy na pewno chcesz usunąć tę sprawę?")) {
-            await axios
+            await api
                 .delete(`/cases/${caseId}`)
                 .then(() => {
                     setCases((prevCases) =>
@@ -63,16 +63,16 @@ const CasesList: React.FC = () => {
                 )}
                 {isArray(cases) &&
                     cases.map((caseItem) => (
-                        <li key={caseItem.id} className="list-item">
+                        <li key={caseItem.case_id} className="list-item">
                             <div>
-                                <strong>{caseItem.title}</strong> -{" "}
-                                {caseItem.status}
+                                <strong>{caseItem.case_identifier}</strong> -{" "}
+                                {caseItem.case_description}
                             </div>
                             <div className="actions">
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`cases/preview/${caseItem.id}`)
+                                        navigate(`cases/preview/${caseItem.case_id}`)
                                     }
                                 >
                                     Zobacz
@@ -80,14 +80,14 @@ const CasesList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`/cases/edit/${caseItem.id}`)
+                                        navigate(`/cases/edit/${caseItem.case_id}`)
                                     }
                                 >
                                     Edytuj
                                 </button>
                                 <button
                                     className="delete-button"
-                                    onClick={() => deleteCase(caseItem.id)}
+                                    onClick={() => deleteCase(caseItem.case_id)}
                                 >
                                     Usuń
                                 </button>
