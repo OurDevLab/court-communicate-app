@@ -1,4 +1,4 @@
-// import UserIcon from "../assets/User.svg";
+import PersonIcon from '@mui/icons-material/Person';
 
 interface Props {
     username: string | null;
@@ -7,13 +7,13 @@ interface Props {
 
 const SidebarFooter: React.FC<Props> = ({ username, logout }) => {
     return (
-        <div className="p-2 footer-container">
-            <span className="mr-2 footer-username">
-                {/* <img src={UserIcon} alt="User Icon" className="footer-icon" /> */}
+        <div className="footer-container">
+            <span className="footer-username">
+                <PersonIcon className="footer-icon" />
                 {username}
             </span>
             <button onClick={logout} className="form-button">
-                Logout
+                Wyloguj
             </button>
         </div>
     );

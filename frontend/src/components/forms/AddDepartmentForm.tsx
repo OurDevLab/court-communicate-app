@@ -17,6 +17,10 @@ const AddDepartmentForm: React.FC = () => {
                 court_id: Number(id) || courtId,
             });
             alert("Departament został dodany");
+            navigate(id
+                ? `/courts/${id}/departments`
+                : "/"
+            );
         } catch (error) {
             console.error("Błąd podczas dodawania departamentu:", error);
         }

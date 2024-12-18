@@ -64,7 +64,7 @@ const CourtsList: React.FC = () => {
                     courts.map((court) => (
                         <li key={court.id} className="list-item">
                             <div>
-                                <strong>{court.name}</strong> - {court.location}
+                                <strong>{court.name}</strong>
                             </div>
                             <div className="actions">
                                 <button
@@ -78,7 +78,7 @@ const CourtsList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`courts/edit/${court.id}`)
+                                        navigate(`/courts/edit/${court.id}`)
                                     }
                                 >
                                     Edytuj

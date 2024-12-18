@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-    cases: { id: number; name: string }[];
+    cases: { case_id: number; case_identifier: string }[];
     selectedCaseId: number | null;
     setSelectedCaseId: (id: number | null) => void;
 }
@@ -10,11 +10,7 @@ const SidebarContent: React.FC<Props> = ({
     cases,
     selectedCaseId,
     setSelectedCaseId,
-}: {
-    cases: { id: number; name: string }[];
-    selectedCaseId: number | null;
-    setSelectedCaseId: (id: number | null) => void;
-}) => {
+}:Props) => {
     return (
         <div className="toggle-section">
             <div className="toggle-header">
@@ -24,15 +20,15 @@ const SidebarContent: React.FC<Props> = ({
                 <ul className="list">
                     {cases.map((caseItem) => (
                         <li
-                            key={caseItem.id}
+                            key={caseItem.case_id}
                             className={`list-item ${
-                                selectedCaseId === caseItem.id
+                                selectedCaseId === caseItem.case_id
                                     ? "list-item-selected"
                                     : "list-item-default"
                             }`}
-                            onClick={() => setSelectedCaseId(caseItem.id)}
+                            onClick={() => setSelectedCaseId(caseItem.case_id)}
                         >
-                            {caseItem.name}
+                            {caseItem.case_identifier}
                         </li>
                     ))}
                 </ul>

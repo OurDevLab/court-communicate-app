@@ -28,11 +28,11 @@ class DepartmentService {
         try {
             let departments;
             if (departmentSelector) {
-                departments = await prisma.case.findMany({
+                departments = await prisma.department.findMany({
                     where: departmentSelector,
                 });
             } else {
-                departments = await prisma.case.findMany();
+                departments = await prisma.department.findMany();
             }
             return departments;
         } catch (error) {
@@ -93,7 +93,7 @@ class DepartmentService {
             const deletedDepartment = await prisma.department.delete({
                 where: { id: Number(departmentID) },
             });
-            deletedDepartment;
+            return deletedDepartment;
         } catch (error) {
             throw new Error(error);
         }

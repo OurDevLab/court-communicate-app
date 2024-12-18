@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../context/User.context";
-import { isArray, uniqBy } from "lodash";
+import { uniqBy } from "lodash";
+
+import "./Chat.css";
 
 import {
     SidebarContent,
@@ -10,8 +12,12 @@ import {
     ChatForm,
 } from ".";
 import api from "../../api";
+import { Navigation } from "../dashboard";
+import { useNavigate } from "react-router-dom";
 
 const Chat: React.FC = () => {
+    const navigate = useNavigate();
+
     const [ws, setWs] = useState<WebSocket | null>(null);
     const [cases, setCases] = useState([]);
     const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
@@ -23,7 +29,6 @@ const Chat: React.FC = () => {
 
     useEffect(() => {
         connectToWs();
-        fetchCases();
     }, []);
 
     function connectToWs() {
@@ -36,33 +41,34 @@ const Chat: React.FC = () => {
         });
     }
 
+    useEffect(() => {
+        fetchCases();
+    }, []);
+
     async function fetchCases() {
         try {
-            const res = await api.get(`/cases`);
-            if (isArray(cases)) setCases(res.data);
+            const res = await api.get("/cases");
+            setCases(res.data);
         } catch (error) {
-            console.error("Błąd podczas pobierania spraw:", error);
+            console.error("Error fetching cases:", error);
         }
     }
 
     useEffect(() => {
-        if (selectedCaseId) {
-            fetchMessages();
-        }
+        if (selectedCaseId) fetchMessages();
     }, [selectedCaseId]);
 
     async function fetchMessages() {
         try {
-            const res = await api.get(`/messages/${selectedCaseId}`);
+            const res = await api.get(`/messages/case/${selectedCaseId}`);
             setMessages(res.data);
         } catch (error) {
-            console.error("Błąd podczas pobierania wiadomości:", error);
+            console.error("Błąd podczas pobierania listy wiadomości:", error);
         }
     }
 
     function handleMessage(event: MessageEvent) {
         const data = JSON.parse(event.data);
-
         if (data.caseId === selectedCaseId) {
             setMessages((prev) => [...prev, data]);
         }
@@ -70,16 +76,22 @@ const Chat: React.FC = () => {
 
     function sendMessage(ev?: React.FormEvent, file = null) {
         if (ev) ev.preventDefault();
-
+    
+        if (!id || !selectedCaseId) {
+            console.error("Missing senderId or selectedCaseId");
+            return;
+        }
+    
         ws?.send(
             JSON.stringify({
                 caseId: selectedCaseId,
                 senderId: id,
+                recipientId: null,
                 text: newMessageText,
                 file,
             })
         );
-
+    
         setMessages((prev) => [
             ...prev,
             {
@@ -107,56 +119,52 @@ const Chat: React.FC = () => {
     }
 
     function logout() {
-        api.post("/logout").then(() => {
-            setWs(null);
-            setId(null);
-            setUsername(null);
-        });
+        setId(null);
+        setUsername(null);
+        localStorage.removeItem("token");
+        navigate("/login");
     }
 
     useEffect(() => {
         divUnderMessages.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const messagesWithoutDupes = uniqBy(messages, "_id");
+    const messagesWithoutDupes = uniqBy(messages, "id");
 
-
-    console.log(cases);
-    console.log(cases.length);
-
-    if (cases && cases.length)
-        return (
-            <div className="dashboard-wrapper">
-                <div className="dashboard-header">
+    return (
+        <div className="container">
+            <Navigation />
+            <div className="chat-container">
+                <aside className="chat-sidebar">
                     <SidebarContent
                         cases={cases}
                         selectedCaseId={selectedCaseId}
                         setSelectedCaseId={setSelectedCaseId}
                     />
                     <SidebarFooter username={username} logout={logout} />
-                </div>
-                <div className="flex flex-col chat-section">
-                    <div className="flex-grow">
-                        {!selectedCaseId && <ChatEmptyContent />}
-                        {selectedCaseId && (
+                </aside>
+
+                <main className="chat-main">
+                    {!selectedCaseId && <ChatEmptyContent />}
+                    {selectedCaseId && (
+                        <>
                             <ChatMessageBox
                                 messages={messagesWithoutDupes}
                                 userId={id}
                                 inputRef={divUnderMessages}
                             />
-                        )}
-                    </div>
-                    {selectedCaseId && (
-                        <ChatForm
-                            newMessageText={newMessageText}
-                            setNewMessageText={setNewMessageText}
-                            sendMessage={sendMessage}
-                            sendFile={sendFile}
-                        />
+                            <ChatForm
+                                newMessageText={newMessageText}
+                                setNewMessageText={setNewMessageText}
+                                sendMessage={sendMessage}
+                                sendFile={sendFile}
+                            />
+                        </>
                     )}
-                </div>
+                </main>
             </div>
-        );
+        </div>
+    );
 };
 
 export default Chat;

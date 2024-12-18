@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import api from "../../api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/User.context";
+import { jwtDecode } from "jwt-decode";
 
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
+    const { setId, setUsername } = useContext(UserContext);
 
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
@@ -12,10 +15,22 @@ const LoginForm: React.FC = () => {
         e.preventDefault();
         try {
             const response = await api.post("/login", { login, password });
-            localStorage.setItem("token", response.data.token);
-            alert("Zalogowano pomyślnie");
-            navigate("/");
+
+            const { token } = response.data;
+            if (token) {
+                localStorage.setItem("token", token);
+
+                const decoded: { id: number; username: string } = jwtDecode(token);
+                setId(decoded.id);
+                setUsername(decoded.username);
+
+                alert(response.data.message);
+                navigate("/");
+            } else {
+                alert("Brak tokena w odpowiedzi serwera.");
+            }
         } catch (error) {
+            console.error("Błąd podczas logowania:", error);
             alert("Błąd podczas logowania");
         }
     };
@@ -47,6 +62,7 @@ const LoginForm: React.FC = () => {
                 <button type="submit" className="form-button">
                     Zaloguj się
                 </button>
+                <p>Nie masz konta? Skorzystaj z <Link to="/register">formularza rejestracji</Link></p>
             </form>
         </div>
     );
