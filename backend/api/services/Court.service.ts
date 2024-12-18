@@ -2,11 +2,7 @@ import prisma from "../../prisma";
 
 import { CourtModel } from "../models";
 
-// 2. CRUD dla modelu Court (Sąd)
-
 class CourtService {
-    // a) Tworzenie sądu:
-
     async createCourt(
         courtData: CourtModel.CreateCourt
     ): Promise<CourtModel.Court> {
@@ -24,8 +20,6 @@ class CourtService {
             throw new Error(error);
         }
     }
-
-    // b) Odczyt wszystkich sądów:
 
     async findManyCourts(
         courtSelector?: CourtModel.CourtSelector
@@ -45,8 +39,6 @@ class CourtService {
         }
     }
 
-    // c) Odczyt konkretnego sądu:
-
     async findCourtByID(courtID: number): Promise<CourtModel.Court> {
         try {
             const court = await prisma.court.findUnique({
@@ -62,8 +54,6 @@ class CourtService {
         }
     }
 
-    // d) Aktualizacja sądu:
-
     async updateCourt(courtID: number, courtData: CourtModel.UpdateCourt) {
         const { name, seat, court_type } = courtData;
         try {
@@ -76,8 +66,6 @@ class CourtService {
             throw new Error(error);
         }
     }
-
-    // e) Usunięcie sądu:
 
     async removeCourt(courtID: number): Promise<CourtModel.Court> {
         try {

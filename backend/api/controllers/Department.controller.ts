@@ -1,9 +1,11 @@
 import * as core from "express-serve-static-core";
 
 import { DepartmentService } from "../services";
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 
 const { OK, CREATED, INTERNAL_ERROR, NOT_FOUND } = ServerStatuses;
+const { DepartmentMessages } = ServerMessages;
+
 const departmentActions = new DepartmentService();
 
 class DepartmentController {
@@ -18,7 +20,7 @@ class DepartmentController {
             res.status(CREATED).json(newDepartment);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się utworzyć departamentu",
+                error: DepartmentMessages.CREATE_DEPARTMENT_ERROR,
             });
         }
     }
@@ -31,12 +33,35 @@ class DepartmentController {
                 res.status(OK).json(departments);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono żadnych departamentów",
+                    error: DepartmentMessages.NONE_DEPARTMENT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się pobrać listy departamentów",
+                error: DepartmentMessages.GET_DEPARTMENTS_ERROR,
+            });
+        }
+    }
+
+    async getDepartmentsByCourtID(req: core.Request, res: core.Response) {
+        const { court_id } = req.params;
+
+        try {
+            const departments =
+                await departmentActions.findDepartmentsByCourtID(
+                    Number(court_id)
+                );
+
+            if (departments.length > 0) {
+                res.status(OK).json(departments);
+            } else {
+                res.status(NOT_FOUND).json({
+                    error: DepartmentMessages.NONE_DEPARTMENT_FOUND_FOR_COURT,
+                });
+            }
+        } catch (error) {
+            res.status(INTERNAL_ERROR).json({
+                error: DepartmentMessages.GET_DEPARTMENTS_ERROR,
             });
         }
     }
@@ -51,12 +76,12 @@ class DepartmentController {
                 res.status(OK).json(department);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Departament nie został znaleziony",
+                    error: DepartmentMessages.SELECTED_DEPARTMENT_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Błąd podczas pobierania danych departamentu",
+                error: DepartmentMessages.GET_SELECTED_DEPARTMENT_ERROR,
             });
         }
     }
@@ -74,17 +99,16 @@ class DepartmentController {
 
             if (updatedDepartment) {
                 res.status(OK).json({
-                    message:
-                        "Dane wybranego departamentu zostały zaktualizowane",
+                    message: DepartmentMessages.UPDATE_DEPARTMENT_SUCCESS,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono departamentu przeznaczonego do aktualizacji danych",
+                    error: DepartmentMessages.DEPARTMENT_TO_UPDATE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Aktualizacja departamentu nie powiodła się",
+                error: DepartmentMessages.UPDATE_DEPARTMENT_ERROR,
             });
         }
     }
@@ -98,16 +122,16 @@ class DepartmentController {
 
             if (removedDepartment) {
                 res.status(OK).json({
-                    message: "Departament został usunięty",
+                    message: DepartmentMessages.DELETE_DEPARTMENT_SUCCES,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono departamentu przeznaczonego do usunięcia",
+                    error: DepartmentMessages.DEPARTMENT_TO_DELETE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się usunąć departamentu",
+                error: DepartmentMessages.DELETE_DEPARTMENT_ERROR,
             });
         }
     }

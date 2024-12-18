@@ -51,11 +51,11 @@ async function handleMessage(
     connection: any,
     wss: WebSocketServer
 ) {
-    const { caseId, recipientId, text, file } = messageData;
+    const { senderId, caseId, recipientId, text, file } = messageData;
 
     const newMessage = await messageActions.createMessage({
         messageData: {
-            senderId: connection.userId,
+            senderId,
             recipientId,
             caseId,
             text,

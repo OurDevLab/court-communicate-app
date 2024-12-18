@@ -10,6 +10,7 @@ const caseRouter = express();
 
 caseRouter.post(CASES, caseController.addNewCase);
 caseRouter.get(CASES, caseController.getAllCases);
+caseRouter.get(`${CASES}/:userID`, caseController.getUserCases);
 caseRouter.get(`${CASES}/:id`, caseController.getSelectedCase);
 caseRouter.put(`${CASES}/:id`, caseController.updateCase);
 caseRouter.delete(`${CASES}/:id`, caseController.removeCase);

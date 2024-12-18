@@ -1,9 +1,11 @@
 import * as core from "express-serve-static-core";
 
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 import { CourtService } from "../services";
 
 const { OK, CREATED, INTERNAL_ERROR, NOT_FOUND } = ServerStatuses;
+const { CourtMessages } = ServerMessages;
+
 const courtActions = new CourtService();
 
 class CourtController {
@@ -19,7 +21,7 @@ class CourtController {
             res.status(CREATED).json(newCourt);
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się utworzyć sądu",
+                error: CourtMessages.CREATE_COURT_ERROR,
             });
         }
     }
@@ -32,12 +34,12 @@ class CourtController {
                 res.status(OK).json(courts);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono żadnych spraw",
+                    error: CourtMessages.NONE_COURT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się pobrać listy sądów",
+                error: CourtMessages.GET_COURTS_ERROR,
             });
         }
     }
@@ -51,12 +53,12 @@ class CourtController {
                 res.status(OK).json(courtData);
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Sąd nie został znaleziony",
+                    error: CourtMessages.SELECTED_COURT_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Błąd podczas pobierania danych sądu",
+                error: CourtMessages.GET_SELECTED_COURT_ERROR,
             });
         }
     }
@@ -73,16 +75,16 @@ class CourtController {
 
             if (updatedCourt) {
                 res.status(OK).json({
-                    message: "Dane wybranego sądu zostały zaktualizowane",
+                    message: CourtMessages.UPDATE_COURT_SUCCESS,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono sądu przeznaczonego do aktualizacji danych",
+                    error: CourtMessages.COURT_TO_UPDATE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Aktualizacja danych sądu nie powiodła się",
+                error: CourtMessages.UPDATE_COURT_ERROR,
             });
         }
     }
@@ -94,16 +96,16 @@ class CourtController {
 
             if (removedCourt) {
                 res.status(OK).json({
-                    message: "Wybrany sąd został usunięty",
+                    message: CourtMessages.DELETE_COURT_SUCCES,
                 });
             } else {
                 res.status(NOT_FOUND).json({
-                    error: "Nie znaleziono sądu przeznaczonego do usunięcia",
+                    error: CourtMessages.COURT_TO_DELETE_NOT_FOUND,
                 });
             }
         } catch (error) {
             res.status(INTERNAL_ERROR).json({
-                error: "Nie udało się usunąć sądu",
+                error: CourtMessages.DELETE_COURT_ERROR,
             });
         }
     }

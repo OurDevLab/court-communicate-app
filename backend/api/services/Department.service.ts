@@ -2,11 +2,7 @@ import prisma from "../../prisma";
 
 import { DepartmentModel } from "../models";
 
-// 2. CRUD dla modelu Department (Departament)
-
 class DepartmentService {
-    // a) Tworzenie departamentu:
-
     async createDepartment(
         departmentData: DepartmentModel.CreateDepartment
     ): Promise<DepartmentModel.Department> {
@@ -26,19 +22,17 @@ class DepartmentService {
         }
     }
 
-    // b) Odczyt wszystkich departamentów:
-
     async findManyDepartments(
         departmentSelector?: DepartmentModel.DepartmentSelector
     ): Promise<DepartmentModel.Department[]> {
         try {
             let departments;
             if (departmentSelector) {
-                departments = await prisma.case.findMany({
+                departments = await prisma.department.findMany({
                     where: departmentSelector,
                 });
             } else {
-                departments = await prisma.case.findMany();
+                departments = await prisma.department.findMany();
             }
             return departments;
         } catch (error) {
@@ -46,7 +40,18 @@ class DepartmentService {
         }
     }
 
-    // c) Odczyt konkretnego departamentu:
+    async findDepartmentsByCourtID(
+        courtID: number
+    ): Promise<DepartmentModel.Department[]> {
+        try {
+            const departments = await prisma.department.findMany({
+                where: { court_id: courtID },
+            });
+            return departments;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
     async findDepartmentByID(
         departmentID: number
@@ -65,8 +70,6 @@ class DepartmentService {
         }
     }
 
-    // d) Aktualizacja departamentu:
-
     async updateDepartment(
         departmentID: number,
         departmentData: DepartmentModel.UpdateDepartment
@@ -83,8 +86,6 @@ class DepartmentService {
         }
     }
 
-    // e) Usunięcie departamentu:
-
     async deleteDepartment(
         departmentID: number
     ): Promise<DepartmentModel.Department> {
@@ -92,7 +93,7 @@ class DepartmentService {
             const deletedDepartment = await prisma.department.delete({
                 where: { id: Number(departmentID) },
             });
-            deletedDepartment;
+            return deletedDepartment;
         } catch (error) {
             throw new Error(error);
         }

@@ -2,11 +2,7 @@ import prisma from "../../prisma";
 
 import { CaseModel } from "../models";
 
-// 2. CRUD dla modelu Case (Sprawa)
-
 class CaseService {
-    // a) Tworzenie sprawy:
-
     async createCase(caseData: CaseModel.CreateCase): Promise<CaseModel.Case> {
         const {
             case_identifier,
@@ -35,8 +31,6 @@ class CaseService {
         }
     }
 
-    // b) Odczyt wszystkich spraw:
-
     async findManyCases(
         caseSelector?: CaseModel.CaseSelector
     ): Promise<CaseModel.Case[]> {
@@ -55,7 +49,31 @@ class CaseService {
         }
     }
 
-    // c) Odczyt konkretnej sprawy:
+    async findUserCases(userID: number): Promise<CaseModel.Case | Boolean> {
+        try {
+            const caseData = await prisma.case.findMany({
+                where: {
+                    OR: [
+                        { judge_user_id: userID },
+                        { respondent_user_id: userID },
+                        { clerk_user_id: userID },
+                    ],
+                },
+                select: {
+                    case_id: true,
+                    case_identifier: true,
+                    case_description: true,
+                },
+            });
+            if (caseData) {
+                return caseData;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
     async findCaseByID(caseID: number): Promise<CaseModel.Case | Boolean> {
         try {
@@ -71,8 +89,6 @@ class CaseService {
             throw new Error(error);
         }
     }
-
-    // d) Aktualizacja sprawy:
 
     async updateCase(
         caseID: number,
@@ -102,8 +118,6 @@ class CaseService {
             throw new Error(error);
         }
     }
-
-    // e) Usunięcie sprawy:
 
     async deleteCase(caseID: number): Promise<CaseModel.Case> {
         try {
