@@ -99,19 +99,19 @@ const App: React.FC = () => {
                         />
 
                         <Route
-                            path="/documents/cassation/add/"
+                            path="/documents/cassation"
                             element={<AddCassationForm />}
                         />
                         <Route
-                            path="/documents/complaint/add"
+                            path="/documents/complaint"
                             element={<ComplaintForm />}
                         />
                         <Route
-                            path="/documents/judgment/add"
+                            path="/documents/judgment"
                             element={<JudgmentForm />}
                         />
                         <Route
-                            path="/documents/ordinance/add"
+                            path="/documents/ordinance"
                             element={<OrdinanceForm />}
                         />
                     </Route>
