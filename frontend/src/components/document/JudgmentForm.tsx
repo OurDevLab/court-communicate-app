@@ -1,17 +1,12 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../context/User.context";
 import api from "../../api";
 
-interface Court {
-    id: number;
-    name: string;
-}
+const JudgmentForm: React.FC = () => {
+    const { id: userId } = useContext(UserContext);
 
-interface Props {
-    onDocumentAdded: (data) => void;
-}
-
-const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
     const [formData, setFormData] = useState({
+        caseId: "",
         location: "",
         date: "",
         referenceNumber: "",
@@ -25,7 +20,7 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
         court: "",
     });
 
-    const [courts, setCourts] = useState<Court[]>([]);
+    const [courts, setCourts] = useState([]);
 
     useEffect(() => {
         async function fetchCourts() {
@@ -47,12 +42,22 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userId) {
+            alert("Nie jesteś zalogowany.");
+            return;
+        }
         try {
-            const response = await api.post("/api/documents", formData);
+            const payload = {
+                caseId: formData.caseId,
+                userId,
+                type: "judgment",
+                content: formData,
+            };
+
+            const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                onDocumentAdded(response.data);
                 alert("Dokument został dodany.");
             }
         } catch (error) {
@@ -156,4 +161,4 @@ const AddCassationForm: React.FC<Props> = ({ onDocumentAdded }) => {
     );
 };
 
-export default AddCassationForm;
+export default JudgmentForm;

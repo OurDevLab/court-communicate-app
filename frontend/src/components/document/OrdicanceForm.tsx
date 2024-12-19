@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/User.context";
 import api from "../../api";
 
-interface Props {
-    onOrdinanceSaved: (data) => void;
-}
-
-const OrdinanceForm: React.FC<Props> = ({ onOrdinanceSaved }) => {
+const OrdinanceForm: React.FC = () => {
+    const { id: userId } = useContext(UserContext);
     const [formData, setFormData] = useState({
+        caseId: "",
         symbol: "",
         judge: "",
         form: "",
@@ -18,17 +17,27 @@ const OrdinanceForm: React.FC<Props> = ({ onOrdinanceSaved }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userId) {
+            alert("Nie jesteś zalogowany.");
+            return;
+        }
         try {
-            const response = await api.post(`/ordinances`, formData);
+            const payload = {
+                caseId: formData.caseId,
+                userId,
+                type: "judgment",
+                content: formData,
+            };
+
+            const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                onOrdinanceSaved(response.data);
-                alert("Zarządzenie zostało zapisane.");
+                alert("Dokument został dodany.");
             }
         } catch (error) {
-            console.error("Błąd podczas zapisywania zarządzenia", error);
-            alert("Nie udało się zapisać zarządzenia.");
+            console.error("Błąd podczas dodawania dokumentu", error);
+            alert("Nie udało się dodać dokumentu.");
         }
     };
 

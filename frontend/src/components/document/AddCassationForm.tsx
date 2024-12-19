@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/User.context";
 import api from "../../api";
 
-interface Props {
-    caseId: number;
-    onDocumentAdded: (data) => void;
-}
-
-const AddCassationForm: React.FC<Props> = ({ caseId, onDocumentAdded }) => {
+const AddCassationForm: React.FC = () => {
+    const { id: userId } = useContext(UserContext);
     const [formData, setFormData] = useState({
+        caseId: "",
         location: "",
         date: "",
         court: "",
@@ -26,20 +24,31 @@ const AddCassationForm: React.FC<Props> = ({ caseId, onDocumentAdded }) => {
         attachments: "",
     });
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userId) {
+            alert("Nie jesteś zalogowany.");
+            return;
+        }
         try {
-            const response = await api.post(
-                `/cases/${caseId}/documents`,
-                formData
-            );
+            const payload = {
+                caseId: formData.caseId,
+                userId,
+                type: "cassation",
+                content: formData,
+            };
+
+            const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                onDocumentAdded(response.data);
                 alert("Dokument został dodany.");
             }
         } catch (error) {

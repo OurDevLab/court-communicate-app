@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../../context/User.context";
 import api from "../../api";
 
-interface Props {
-    onComplaintSubmitted: (data) => void;
-}
-
-const ComplaintForm: React.FC<Props> = ({ onComplaintSubmitted }) => {
+const ComplaintForm: React.FC = () => {
+    const { id: userId } = useContext(UserContext);
     const [formData, setFormData] = useState({
+        caseId: "",
         date: "",
         complainant: "",
         complainantAddress: "",
@@ -14,17 +13,29 @@ const ComplaintForm: React.FC<Props> = ({ onComplaintSubmitted }) => {
         complaintContent: "",
     });
 
-    const handleChange = (e) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userId) {
+            alert("Nie jesteś zalogowany.");
+            return;
+        }
         try {
-            const response = await api.post(`/complaints`, formData);
+            const payload = {
+                caseId: formData.caseId,
+                userId,
+                type: "complaint",
+                content: formData,
+            };
+
+            const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                onComplaintSubmitted(response.data);
                 alert("Skarga została przesłana.");
             }
         } catch (error) {
