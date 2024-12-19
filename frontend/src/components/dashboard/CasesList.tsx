@@ -72,7 +72,7 @@ const CasesList: React.FC = () => {
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`cases/preview/${caseItem.case_id}`)
+                                        navigate(`/cases/preview/${caseItem.case_id}`)
                                     }
                                 >
                                     Zobacz

@@ -21,6 +21,7 @@ export const CaseMessages = {
     SELECTED_CASE_NOT_FOUND: "Sprawa nie została znaleziona",
     GET_SELECTED_CASE_ERROR: "Błąd podczas pobierania sprawy",
     UPDATE_CASE_SUCCESS: "Wybrana sprawa została zaktualizowana",
+    USER_CASES_NOT_AUTHORIZED: "Unauthorized access",
     CASE_TO_UPDATE_NOT_FOUND:
         "Nie znaleziono sprawy przeznaczonej do aktualizacji",
     UPDATE_CASE_ERROR: "Aktualizacja sprawy nie powiodła się",
