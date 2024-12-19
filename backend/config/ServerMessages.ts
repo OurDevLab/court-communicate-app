@@ -89,4 +89,14 @@ export const UserMessages = {
     DELETE_USER_ERROR: "Nie udało się usunąć użytkownika",
 };
 
+export const DocumentMessages = {
+    ADD_DOCUMENT_ERROR: "Nie udało się dodać dokumentu",
+    GET_DOCUMENTS_ERROR: "Nie udało się pobrać listy dokumentów",
+    UPDATE_DOCUMENT_ERROR: "Nie udało się zaktualizować dokumentu",
+    DELETE_DOCUMENT_ERROR: "Nie udało się usunąć dokumentu",
+};
+
 export const TestMessage = "Hello World!";
+
+export const ServerLaunchMessage = (port: number) =>
+    `Serwer uruchomiono na porcie ${port}`;
