@@ -5,4 +5,4 @@ export { default as DepartmentController } from "./Department.controller";
 export { default as MessageController } from "./Message.controller";
 export { default as TestController } from "./Test.controller";
 export { default as UserController } from "./User.controller";
-export { default as DocumentController} from "./Document.Controller";
+export { default as DocumentController } from "./Document.controller";

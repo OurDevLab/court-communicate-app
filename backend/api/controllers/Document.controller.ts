@@ -1,8 +1,10 @@
 import * as core from "express-serve-static-core";
 import { DocumentService } from "../services";
-import { ServerStatuses } from "../../config";
+import { ServerStatuses, ServerMessages } from "../../config";
 
 const { OK, CREATED, INTERNAL_ERROR } = ServerStatuses;
+const { DocumentMessages } = ServerMessages;
+
 const documentActions = new DocumentService();
 
 class DocumentController {
@@ -19,7 +21,9 @@ class DocumentController {
 
             res.status(CREATED).json(newDocument);
         } catch (error) {
-            res.status(INTERNAL_ERROR).json({ error: "Error adding document" });
+            res.status(INTERNAL_ERROR).json({
+                error: DocumentMessages.ADD_DOCUMENT_ERROR,
+            });
         }
     }
 
@@ -33,7 +37,9 @@ class DocumentController {
 
             res.status(OK).json(documents);
         } catch (error) {
-            res.status(INTERNAL_ERROR).json({ error: "Error fetching documents" });
+            res.status(INTERNAL_ERROR).json({
+                error: DocumentMessages.GET_DOCUMENTS_ERROR,
+            });
         }
     }
 
@@ -49,7 +55,9 @@ class DocumentController {
 
             res.status(OK).json(updatedDocument);
         } catch (error) {
-            res.status(INTERNAL_ERROR).json({ error: "Error updating document" });
+            res.status(INTERNAL_ERROR).json({
+                error: DocumentMessages.UPDATE_DOCUMENT_ERROR,
+            });
         }
     }
 
@@ -57,11 +65,15 @@ class DocumentController {
         const { id } = req.params;
 
         try {
-            const deletedDocument = await documentActions.deleteDocument(Number(id));
+            const deletedDocument = await documentActions.deleteDocument(
+                Number(id)
+            );
 
             res.status(OK).json(deletedDocument);
         } catch (error) {
-            res.status(INTERNAL_ERROR).json({ error: "Error deleting document" });
+            res.status(INTERNAL_ERROR).json({
+                error: DocumentMessages.DELETE_DOCUMENT_ERROR,
+            });
         }
     }
 }

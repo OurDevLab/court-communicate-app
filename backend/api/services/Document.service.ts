@@ -24,7 +24,9 @@ class DocumentService {
         }
     }
 
-    async getDocumentsByCase(caseId: number): Promise<DocumentModel.Document[]> {
+    async getDocumentsByCase(
+        caseId: number
+    ): Promise<DocumentModel.Document[]> {
         try {
             const documents = await prisma.document.findMany({
                 where: { caseId },

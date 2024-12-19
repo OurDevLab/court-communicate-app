@@ -3,25 +3,24 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import path from "path";
 
 import {
     AuthRouter,
     CaseRouter,
     CourtRouter,
     DepartmentRouter,
+    DocumentRouter,
     MessageRouter,
     TestRouter,
     UserRouter,
 } from "./api/routes";
 
 import { initializeWebSocket } from "./api/handlers/websocket.handler";
-import { ConfigVariables, ServerPaths } from "./config";
+import { ConfigVariables, ServerPaths, ServerMessages } from "./config";
 
 const { clientURL, jwtSecret, portNumber } = ConfigVariables;
 const { ROOT, UPLOADS } = ServerPaths;
-
-// const __dirname = path.dirname(__filename);
+const { ServerLaunchMessage } = ServerMessages;
 
 const PORT = Number(portNumber);
 const app = express();
@@ -43,6 +42,7 @@ app.use(ROOT, AuthRouter);
 app.use(ROOT, CaseRouter);
 app.use(ROOT, CourtRouter);
 app.use(ROOT, DepartmentRouter);
+app.use(ROOT, DocumentRouter);
 app.use(ROOT, MessageRouter);
 app.use(ROOT, TestRouter);
 app.use(ROOT, UserRouter);
@@ -52,7 +52,7 @@ const finishPrismaService = async () => await prisma.$disconnect();
 finishPrismaService();
 
 const server = app.listen(PORT, () => {
-    console.log(`Listening on ${PORT}`);
+    console.log(ServerLaunchMessage(PORT));
 });
 
 initializeWebSocket(server, jwtSecret);

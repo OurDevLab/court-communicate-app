@@ -4,4 +4,4 @@ export { default as CourtService } from "./Court.service";
 export { default as DepartmentService } from "./Department.service";
 export { default as MessageService } from "./Message.service";
 export { default as UserService } from "./User.service";
-export { default as DocumentService} from "./Document.Service";
+export { default as DocumentService } from "./Document.service";
