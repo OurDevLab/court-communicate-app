@@ -114,7 +114,8 @@ button:focus-visible {
   display: block;
   color: #c0c0c0;
   margin-bottom: 5px;
-  min-width: 20%;
+  /* min-width: 20%; */
+  min-width: 25%;
   text-align: left;
 }
 
@@ -137,6 +138,8 @@ button:focus-visible {
   border-radius: 4px;
   background-color: #2a2a2a;
   color: #e0e0e0;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 .form-input:focus {
