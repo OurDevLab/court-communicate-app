@@ -1,42 +1,50 @@
 import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../context/User.context";
 import api from "../../api";
+import { Navigation } from "../dashboard";
+import { useNavigate } from "react-router-dom";
 
 const JudgmentForm: React.FC = () => {
-    const { id: userId } = useContext(UserContext);
+    const navigate = useNavigate();
 
+    const { id: userId } = useContext(UserContext);
+    const [courts, setCourts] = useState([]);
+    const [cases, setCases] = useState([]);
     const [formData, setFormData] = useState({
-        caseId: "",
-        location: "",
         date: "",
-        referenceNumber: "",
-        judgment: "",
-        judge: "",
-        party: "",
-        caseSubject: "",
-        courtJugment: "",
+        location: "",
+        courtId: "",
+        caseId: "",
+        judge1: "",
+        judge2: "",
+        judge3: "",
+        protocolOfficer: "",
+        subject: "",
+        decision: "",
         justification: "",
-        signature: "",
-        court: "",
     });
 
-    const [courts, setCourts] = useState([]);
-
     useEffect(() => {
-        async function fetchCourts() {
+        const fetchData = async () => {
             try {
-                const response = await api.get("/api/courts");
-                setCourts(response.data);
+                const [courtsResponse, casesResponse] = await Promise.all([
+                    api.get("/courts"),
+                    api.get("/cases"),
+                ]);
+                setCourts(courtsResponse.data);
+                setCases(casesResponse.data);
             } catch (error) {
-                console.error("Failed to fetch courts", error);
+                console.error("Błąd podczas pobierania danych", error);
             }
-        }
+        };
 
-        fetchCourts();
+        fetchData();
     }, []);
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
     ) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -50,7 +58,6 @@ const JudgmentForm: React.FC = () => {
         }
         try {
             const payload = {
-                caseId: formData.caseId,
                 userId,
                 type: "judgment",
                 content: formData,
@@ -58,28 +65,18 @@ const JudgmentForm: React.FC = () => {
 
             const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                alert("Dokument został dodany.");
+                alert("Wyrok został dodany.");
             }
         } catch (error) {
-            console.error("Błąd podczas dodawania dokumentu", error);
-            alert("Nie udało się dodać dokumentu.");
+            console.error("Błąd podczas dodawania wyroku", error);
+            alert("Nie udało się dodać wyroku.");
         }
     };
 
     return (
         <form className="form-container" onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="location">Miejscowość</label>
-                <input
-                    id="location"
-                    name="location"
-                    type="text"
-                    value={formData.location}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Wpisz miejscowość"
-                />
-            </div>
+            <Navigation />
+            <h1 className="header">Formularz wyroku</h1>
 
             <div className="form-group">
                 <label htmlFor="date">Data</label>
@@ -90,21 +87,56 @@ const JudgmentForm: React.FC = () => {
                     value={formData.date}
                     onChange={handleChange}
                     className="form-input"
+                    required
                 />
             </div>
 
             <div className="form-group">
-                <label htmlFor="court">Wybierz sąd</label>
-                <select
-                    id="court"
-                    name="court"
-                    value={formData.court}
+                <label htmlFor="location">Miejscowość</label>
+                <input
+                    id="location"
+                    name="location"
+                    type="text"
+                    value={formData.location}
                     onChange={handleChange}
                     className="form-input"
+                    placeholder="Wpisz miejscowość"
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="caseId">Sygnatura akt</label>
+                <select
+                    id="caseId"
+                    name="caseId"
+                    value={formData.caseId}
+                    onChange={handleChange}
+                    className="form-input"
+                    required
+                >
+                    <option value="">Wybierz sprawę</option>
+                    {cases.map((caseItem) => (
+                        <option key={caseItem.case_id} value={caseItem.case_id}>
+                            {caseItem.case_identifier}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="courtId">Sąd</label>
+                <select
+                    id="courtId"
+                    name="courtId"
+                    value={formData.courtId}
+                    onChange={handleChange}
+                    className="form-input"
+                    required
                 >
                     <option value="">Wybierz sąd</option>
                     {courts.map((court) => (
-                        <option key={court.id} value={court.name}>
+                        <option key={court.id} value={court.id}>
                             {court.name}
                         </option>
                     ))}
@@ -112,49 +144,102 @@ const JudgmentForm: React.FC = () => {
             </div>
 
             <div className="form-group">
-                <label htmlFor="referenceNumber">Sygnatura akt</label>
+                <label>Skład sądu</label>
                 <input
-                    id="referenceNumber"
-                    name="referenceNumber"
+                    name="judge1"
                     type="text"
-                    value={formData.referenceNumber}
+                    value={formData.judge1}
                     onChange={handleChange}
                     className="form-input"
-                    placeholder="Wpisz sygnaturę akt"
+                    placeholder="Sędzia 1"
+                    required
+                />
+                <input
+                    name="judge2"
+                    type="text"
+                    value={formData.judge2}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="Sędzia 2"
+                    required
+                />
+                <input
+                    name="judge3"
+                    type="text"
+                    value={formData.judge3}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="Sędzia 3"
+                    required
                 />
             </div>
 
             <div className="form-group">
-                <label htmlFor="judgment">Typ orzeczenia</label>
-                <select
-                    id="judgment"
-                    name="judgment"
-                    value={formData.judgment}
+                <label htmlFor="protocolOfficer">Protokolant</label>
+                <input
+                    id="protocolOfficer"
+                    name="protocolOfficer"
+                    type="text"
+                    value={formData.protocolOfficer}
                     onChange={handleChange}
                     className="form-input"
-                >
-                    <option value="">Wybierz typ orzeczenia</option>
-                    <option value="sentence">Wyrok</option>
-                    <option value="resolution">Postanowienie</option>
-                </select>
+                    placeholder="Wpisz nazwisko protokolanta"
+                    required
+                />
             </div>
 
             <div className="form-group">
-                <label htmlFor="judge">Wpisz skład sądu</label>
+                <label htmlFor="subject">Przedmiot</label>
                 <input
-                    id="judge"
-                    name="judge"
+                    id="subject"
+                    name="subject"
                     type="text"
-                    value={formData.judge}
+                    value={formData.subject}
                     onChange={handleChange}
                     className="form-input"
-                    placeholder="Wpisz skład sądu"
+                    placeholder="Wpisz przedmiot"
+                    required
                 />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="decision">Rozstrzygnięcie</label>
+                <textarea
+                    id="decision"
+                    name="decision"
+                    value={formData.decision}
+                    onChange={handleChange}
+                    className="form-input"
+                    rows={4}
+                    placeholder="Wpisz rozstrzygnięcie"
+                    required
+                ></textarea>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="justification">Uzasadnienie</label>
+                <textarea
+                    id="justification"
+                    name="justification"
+                    value={formData.justification}
+                    onChange={handleChange}
+                    className="form-input"
+                    rows={6}
+                    placeholder="Wpisz uzasadnienie"
+                    required
+                ></textarea>
             </div>
 
             <div className="form-buttons-group">
                 <button type="submit" className="form-button">
-                    Wyślij dokument
+                    Dodaj wyrok
+                </button>
+
+                <button
+                    onClick={() => navigate("/documents")}
+                    className="form-button form-button-cancel"
+                >
+                    Anuluj
                 </button>
             </div>
         </form>
