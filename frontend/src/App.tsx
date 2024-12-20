@@ -29,7 +29,7 @@ import {
 } from "./components/dashboard";
 
 import {
-    AddCassationForm,
+    CassationForm,
     ComplaintForm,
     JudgmentForm,
     OrdinanceForm,
@@ -100,7 +100,7 @@ const App: React.FC = () => {
 
                         <Route
                             path="/documents/cassation"
-                            element={<AddCassationForm />}
+                            element={<CassationForm />}
                         />
                         <Route
                             path="/documents/complaint"
