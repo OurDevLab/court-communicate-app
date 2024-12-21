@@ -283,6 +283,10 @@ button:focus-visible {
   margin-bottom: 10px;
 }
 
+.dashboard-card-icon {
+  color: #213547;
+}
+
 .dashboard-card-description {
   font-size: 1rem;
   color: #555;

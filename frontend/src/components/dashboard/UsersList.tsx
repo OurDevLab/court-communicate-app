@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { Navigation } from ".";
 import api from "../../api";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
+const { USERS, ADD, EDIT, PREVIEW } = RoutesPaths;
+const {
+    ERROR_FETCHING_USERS,
+    CONFIRM_USER_DELETION,
+    USER_DELETION_SUCCESS,
+    USER_DELETION_ERROR,
+} = ClientMessages;
+
 const UsersList: React.FC = () => {
     const navigate = useNavigate();
 
@@ -15,28 +25,26 @@ const UsersList: React.FC = () => {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const response = await api.get("/users");
+            const response = await api.get(ServerPaths.USERS);
             setUsers(response.data);
         } catch (err) {
-            setError("Błąd podczas pobierania użytkowników:" + err);
+            setError(ERROR_FETCHING_USERS + err);
         } finally {
             setLoading(false);
         }
     };
 
     const deleteUser = async (userId: number) => {
-        if (window.confirm("Czy na pewno chcesz usunąć tego użytkownika?")) {
+        if (window.confirm(CONFIRM_USER_DELETION)) {
             await api
-                .delete(`/users/${userId}`)
+                .delete(`${USERS}/${userId}`)
                 .then(() => {
                     setUsers((prevUsers) =>
                         prevUsers.filter((user) => user.id !== userId)
                     );
-                    alert("Użytkownik został usunięty");
+                    alert(USER_DELETION_SUCCESS);
                 })
-                .catch((error) =>
-                    console.error("Błąd podczas usuwania użytkownika:", error)
-                );
+                .catch((error) => console.error(USER_DELETION_ERROR, error));
         }
     };
 
@@ -53,7 +61,7 @@ const UsersList: React.FC = () => {
             <h1 className="header">Lista użytkowników</h1>
             <button
                 className="add-button"
-                onClick={() => navigate("/users/add")}
+                onClick={() => navigate(`${USERS}${ADD}`)}
             >
                 Dodaj użytkownika
             </button>
@@ -71,7 +79,9 @@ const UsersList: React.FC = () => {
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`/users/preview/${user.id}`)
+                                        navigate(
+                                            `${USERS}${PREVIEW}/${user.id}`
+                                        )
                                     }
                                 >
                                     Zobacz
@@ -79,7 +89,7 @@ const UsersList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`/users/edit/${user.id}`)
+                                        navigate(`${USERS}${EDIT}/${user.id}`)
                                     }
                                 >
                                     Edytuj

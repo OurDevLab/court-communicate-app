@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { Navigation } from ".";
 import api from "../../api";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
+const { CASES, ADD, EDIT, PREVIEW } = RoutesPaths;
+const {
+    ERROR_FETCHING_CASES,
+    CONFIRM_CASE_DELETION,
+    CASE_DELETION_SUCCESS,
+    CASE_DELETION_ERROR,
+} = ClientMessages;
+
 const CasesList: React.FC = () => {
     const navigate = useNavigate();
 
@@ -15,28 +25,26 @@ const CasesList: React.FC = () => {
     const fetchCases = async () => {
         try {
             setLoading(true);
-            const response = await api.get("/cases");
+            const response = await api.get(ServerPaths.CASES);
             setCases(response.data);
         } catch (err) {
-            setError("Błąd podczas pobierania spraw:" + err);
+            setError(ERROR_FETCHING_CASES + err);
         } finally {
             setLoading(false);
         }
     };
 
     const deleteCase = async (caseId: number) => {
-        if (window.confirm("Czy na pewno chcesz usunąć tę sprawę?")) {
+        if (window.confirm(CONFIRM_CASE_DELETION)) {
             await api
-                .delete(`/cases/${caseId}`)
+                .delete(`${ServerPaths.CASES}/${caseId}`)
                 .then(() => {
                     setCases((prevCases) =>
                         prevCases.filter((caseItem) => caseItem.id !== caseId)
                     );
-                    alert("Sprawa została usunięta");
+                    alert(CASE_DELETION_SUCCESS);
                 })
-                .catch((error) =>
-                    console.error("Błąd podczas usuwania sprawy:", error)
-                );
+                .catch((error) => console.error(CASE_DELETION_ERROR, error));
         }
     };
 
@@ -53,7 +61,7 @@ const CasesList: React.FC = () => {
             <h1 className="header">Wykaz spraw</h1>
             <button
                 className="add-button"
-                onClick={() => navigate("/cases/add")}
+                onClick={() => navigate(`${CASES}${ADD}`)}
             >
                 Dodaj sprawę
             </button>
@@ -72,7 +80,9 @@ const CasesList: React.FC = () => {
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`/cases/preview/${caseItem.case_id}`)
+                                        navigate(
+                                            `${CASES}${PREVIEW}/${caseItem.case_id}`
+                                        )
                                     }
                                 >
                                     Zobacz
@@ -80,7 +90,9 @@ const CasesList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`/cases/edit/${caseItem.case_id}`)
+                                        navigate(
+                                            `${CASES}${EDIT}/${caseItem.case_id}`
+                                        )
                                     }
                                 >
                                     Edytuj

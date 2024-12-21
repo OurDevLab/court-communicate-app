@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+import { RoutesPaths } from "../../config";
+const { DASHBOARD, COURTS, CASES, DOCUMENTS, USERS, CHAT } = RoutesPaths;
+
 const Navigation: React.FC = () => {
     const navigate = useNavigate();
 
@@ -9,37 +12,37 @@ const Navigation: React.FC = () => {
             <ul className="dashboard-nav-list">
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate(DASHBOARD)}
                 >
                     Strona główna
                 </li>
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/courts")}
+                    onClick={() => navigate(COURTS)}
                 >
                     Sądy
                 </li>
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/cases")}
+                    onClick={() => navigate(CASES)}
                 >
                     Sprawy
                 </li>
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/documents")}
+                    onClick={() => navigate(DOCUMENTS)}
                 >
                     Dokumenty
                 </li>
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/users")}
+                    onClick={() => navigate(USERS)}
                 >
                     Użytkownicy
                 </li>
                 <li
                     className="dashboard-nav-item"
-                    onClick={() => navigate("/chat")}
+                    onClick={() => navigate(CHAT)}
                 >
                     Komunikacja
                 </li>

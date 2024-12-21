@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { Navigation } from ".";
 import api from "../../api";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
+const { COURTS, ADD, EDIT, PREVIEW } = RoutesPaths;
+const {
+    ERROR_FETCHING_COURTS,
+    CONFIRM_COURT_DELETION,
+    COURT_DELETION_SUCCESS,
+    COURT_DELETION_ERROR,
+} = ClientMessages;
+
 const CourtsList: React.FC = () => {
     const navigate = useNavigate();
 
@@ -15,28 +25,26 @@ const CourtsList: React.FC = () => {
     const fetchCourts = async () => {
         try {
             setLoading(true);
-            const response = await api.get("/courts");
+            const response = await api.get(ServerPaths.COURTS);
             setCourts(response.data);
         } catch (err) {
-            setError("Błąd podczas pobierania sądów:" + err);
+            setError(ERROR_FETCHING_COURTS + err);
         } finally {
             setLoading(false);
         }
     };
 
     const deleteCourt = async (courtId: number) => {
-        if (window.confirm("Czy na pewno chcesz usunąć ten sąd?")) {
+        if (window.confirm(CONFIRM_COURT_DELETION)) {
             await api
-                .delete(`/courts/${courtId}`)
+                .delete(`${ServerPaths.COURTS}/${courtId}`)
                 .then(() => {
                     setCourts((prevCourts) =>
                         prevCourts.filter((court) => court.id !== courtId)
                     );
-                    alert("Sąd został usunięty.");
+                    alert(COURT_DELETION_SUCCESS);
                 })
-                .catch((error) =>
-                    console.error("Błąd podczas usuwania sądu:", error)
-                );
+                .catch((error) => console.error(COURT_DELETION_ERROR, error));
         }
     };
 
@@ -52,7 +60,7 @@ const CourtsList: React.FC = () => {
             <h1 className="header">Lista sądów</h1>
             <button
                 className="add-button"
-                onClick={() => navigate("/courts/add")}
+                onClick={() => navigate(`${COURTS}${ADD}`)}
             >
                 Dodaj sąd
             </button>
@@ -70,7 +78,9 @@ const CourtsList: React.FC = () => {
                                 <button
                                     className="view-button"
                                     onClick={() =>
-                                        navigate(`/courts/preview/${court.id}`)
+                                        navigate(
+                                            `${COURTS}${PREVIEW}/${court.id}`
+                                        )
                                     }
                                 >
                                     Zobacz
@@ -78,7 +88,7 @@ const CourtsList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`/courts/edit/${court.id}`)
+                                        navigate(`${COURTS}${EDIT}/${court.id}`)
                                     }
                                 >
                                     Edytuj
