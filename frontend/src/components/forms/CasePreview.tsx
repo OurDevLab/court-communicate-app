@@ -2,6 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const CasePreview: React.FC = () => {
     const navigate = useNavigate();
     const { id: caseId } = useParams();
@@ -13,12 +15,12 @@ const CasePreview: React.FC = () => {
     useEffect(() => {
         const fetchCase = async () => {
             try {
-                const response = await api.get(`/cases/${caseId}`);
+                const response = await api.get(
+                    `${ServerPaths.CASES}/${caseId}`
+                );
                 setCaseData(response.data);
             } catch (err) {
-                setError(
-                    "Wystąpił błąd podczas pobierania szczegółów sprawy:" + err
-                );
+                setError(ClientMessages.CASE_PREVIEW_ERROR + err);
             } finally {
                 setLoading(false);
             }
@@ -31,7 +33,7 @@ const CasePreview: React.FC = () => {
 
     return (
         <div className="container">
-            <button onClick={() => navigate("/cases")}>
+            <button onClick={() => navigate(RoutesPaths.CASES)}>
                 Wróć do wykazu spraw
             </button>
             <h1>Szczegóły sprawy</h1>
