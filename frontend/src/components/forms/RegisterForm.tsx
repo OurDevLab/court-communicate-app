@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const RegisterForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -13,11 +15,16 @@ const RegisterForm: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post("/register", { login, password, name, surname });
-            alert("Rejestracja zakończona sukcesem");
-            navigate("/login");
+            await api.post(ServerPaths.REGISTER, {
+                login,
+                password,
+                name,
+                surname,
+            });
+            alert(ClientMessages.REGISTER_SUCCESS);
+            navigate(RoutesPaths.LOGIN);
         } catch (error) {
-            alert("Błąd podczas rejestracji");
+            alert(ClientMessages.REGISTER_ERROR);
         }
     };
 
