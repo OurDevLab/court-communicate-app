@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
+const { COURTS, DEPARTMENTS, DASHBOARD } = RoutesPaths;
+
 const AddDepartmentForm: React.FC = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -12,17 +16,14 @@ const AddDepartmentForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post("/departments", {
+            await api.post(ServerPaths.DEPARTMENTS, {
                 name,
                 court_id: Number(id) || courtId,
             });
-            alert("Departament został dodany");
-            navigate(id
-                ? `/courts/${id}/departments`
-                : "/"
-            );
+            alert(ClientMessages.DEPARTMENT_ADDING_SUCCESS);
+            navigate(id ? `${COURTS}/${id}${DEPARTMENTS}` : DASHBOARD);
         } catch (error) {
-            console.error("Błąd podczas dodawania departamentu:", error);
+            console.error(ClientMessages.DEPARTMENT_ADDING_ERROR, error);
         }
     };
 
@@ -57,8 +58,8 @@ const AddDepartmentForm: React.FC = () => {
                     <button
                         onClick={() =>
                             id
-                                ? navigate(`/courts/${id}/departments`)
-                                : navigate("/")
+                                ? navigate(`${COURTS}/${id}${DEPARTMENTS}`)
+                                : navigate(DASHBOARD)
                         }
                         className="form-button form-button-cancel"
                     >
