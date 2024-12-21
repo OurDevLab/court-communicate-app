@@ -1,6 +1,11 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
 
+import { ConfigVariables, ClientMessages } from "../config";
+
+const { tokenKey, storageEvent } = ConfigVariables;
+const { TOKEN_EXPIRED, TOKEN_VALIDATION_ERROR } = ClientMessages;
+
 interface DecodedToken {
     id: number;
     username: string;
@@ -27,21 +32,21 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
     const [id, setId] = useState<number | null>(null);
 
     const loadUserFromToken = () => {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem(tokenKey);
         if (token) {
             try {
                 const decoded: DecodedToken = jwtDecode(token);
                 const currentTime = Math.floor(Date.now() / 1000);
                 if (decoded.exp < currentTime) {
-                    throw new Error("Token expired");
+                    throw new Error(TOKEN_EXPIRED);
                 }
                 setId(decoded.id);
                 setUsername(decoded.username);
             } catch (error) {
-                console.error("Token validation error:", error);
+                console.error(TOKEN_VALIDATION_ERROR, error);
                 setId(null);
                 setUsername(null);
-                localStorage.removeItem("token");
+                localStorage.removeItem(tokenKey);
             }
         } else {
             setId(null);
@@ -53,14 +58,14 @@ export function UserContextProvider({ children }: { children: ReactNode }) {
         loadUserFromToken();
 
         const handleStorageChange = (event: StorageEvent) => {
-            if (event.key === "token") {
+            if (event.key === tokenKey) {
                 loadUserFromToken();
             }
         };
-        window.addEventListener("storage", handleStorageChange);
+        window.addEventListener(storageEvent, handleStorageChange);
 
         return () => {
-            window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener(storageEvent, handleStorageChange);
         };
     }, []);
 
