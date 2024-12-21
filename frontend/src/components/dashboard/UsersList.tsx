@@ -71,7 +71,7 @@ const UsersList: React.FC = () => {
                 )}
                 {isArray(users) &&
                     users.map((user) => (
-                        <li key={user.id} className="list-item">
+                        <li key={user.user_id} className="list-item">
                             <div>
                                 <strong>{user.name}</strong> - {user.email}
                             </div>
@@ -80,7 +80,7 @@ const UsersList: React.FC = () => {
                                     className="view-button"
                                     onClick={() =>
                                         navigate(
-                                            `${USERS}${PREVIEW}/${user.id}`
+                                            `${USERS}${PREVIEW}/${user.user_id}`
                                         )
                                     }
                                 >
@@ -89,14 +89,14 @@ const UsersList: React.FC = () => {
                                 <button
                                     className="edit-button"
                                     onClick={() =>
-                                        navigate(`${USERS}${EDIT}/${user.id}`)
+                                        navigate(`${USERS}${EDIT}/${user.user_id}`)
                                     }
                                 >
                                     Edytuj
                                 </button>
                                 <button
                                     className="delete-button"
-                                    onClick={() => deleteUser(user.id)}
+                                    onClick={() => deleteUser(user.user_id)}
                                 >
                                     Usuń
                                 </button>
