@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../context/User.context";
 import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
-const JudgmentForm: React.FC = () => {
+const CassationForm: React.FC = () => {
     const navigate = useNavigate();
 
     const { id: userId } = useContext(UserContext);
@@ -14,18 +14,20 @@ const JudgmentForm: React.FC = () => {
         date: "",
         location: "",
         courtId: "",
+        complainant: "",
+        attorney: "",
         caseId: "",
-        judge1: "",
-        judge2: "",
-        judge3: "",
-        protocolOfficer: "",
-        subject: "",
-        decision: "",
+        feeAmount: "",
+        judgmentDescription: "",
+        cassationCharges: "",
+        cassationDemands: "",
+        hearingRequest: "hearing",
         justification: "",
+        attachments: "",
     });
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchCourtsAndCases = async () => {
             try {
                 const [courtsResponse, casesResponse] = await Promise.all([
                     api.get("/courts"),
@@ -38,7 +40,7 @@ const JudgmentForm: React.FC = () => {
             }
         };
 
-        fetchData();
+        fetchCourtsAndCases();
     }, []);
 
     const handleChange = (
@@ -59,25 +61,24 @@ const JudgmentForm: React.FC = () => {
         try {
             const payload = {
                 userId,
-                type: "judgment",
+                type: "cassation",
                 content: formData,
             };
 
             const response = await api.post(`/documents`, payload);
             if (response.status === 201) {
-                alert("Wyrok został dodany.");
+                alert("Skarga kasacyjna została przesłana.");
             }
         } catch (error) {
-            console.error("Błąd podczas dodawania wyroku", error);
-            alert("Nie udało się dodać wyroku.");
+            console.error("Błąd podczas dodawania skargi kasacyjnej", error);
+            alert("Nie udało się przesłać skargi kasacyjnej.");
         }
     };
 
     return (
         <form className="form-container" onSubmit={handleSubmit}>
             <Navigation />
-            <h1 className="header">Formularz wyroku</h1>
-
+            <h1 className="header">Formularz skargi kasacyjnej</h1>
             <div className="form-group">
                 <label htmlFor="date">Data</label>
                 <input
@@ -90,7 +91,6 @@ const JudgmentForm: React.FC = () => {
                     required
                 />
             </div>
-
             <div className="form-group">
                 <label htmlFor="location">Miejscowość</label>
                 <input
@@ -101,6 +101,53 @@ const JudgmentForm: React.FC = () => {
                     onChange={handleChange}
                     className="form-input"
                     placeholder="Wpisz miejscowość"
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="courtId">Sąd I instancji</label>
+                <select
+                    id="courtId"
+                    name="courtId"
+                    value={formData.courtId}
+                    onChange={handleChange}
+                    className="form-input"
+                    required
+                >
+                    <option value="">Wybierz sąd</option>
+                    {courts.map((court) => (
+                        <option key={court.id} value={court.id}>
+                            {court.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="complainant">Skarżący</label>
+                <input
+                    id="complainant"
+                    name="complainant"
+                    type="text"
+                    value={formData.complainant}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="Wpisz nazwę skarżącego"
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="attorney">Pełnomocnik</label>
+                <input
+                    id="attorney"
+                    name="attorney"
+                    type="text"
+                    value={formData.attorney}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="Wpisz nazwisko pełnomocnika"
                     required
                 />
             </div>
@@ -125,95 +172,89 @@ const JudgmentForm: React.FC = () => {
             </div>
 
             <div className="form-group">
-                <label htmlFor="courtId">Sąd</label>
-                <select
-                    id="courtId"
-                    name="courtId"
-                    value={formData.courtId}
-                    onChange={handleChange}
-                    className="form-input"
-                    required
-                >
-                    <option value="">Wybierz sąd</option>
-                    {courts.map((court) => (
-                        <option key={court.id} value={court.id}>
-                            {court.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="form-group">
-                <label>Skład sądu</label>
+                <label htmlFor="feeAmount">Wysokość uiszczonego wpisu</label>
                 <input
-                    name="judge1"
-                    type="text"
-                    value={formData.judge1}
+                    id="feeAmount"
+                    name="feeAmount"
+                    type="number"
+                    value={formData.feeAmount}
                     onChange={handleChange}
                     className="form-input"
-                    placeholder="Sędzia 1"
-                    required
-                />
-                <input
-                    name="judge2"
-                    type="text"
-                    value={formData.judge2}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Sędzia 2"
-                    required
-                />
-                <input
-                    name="judge3"
-                    type="text"
-                    value={formData.judge3}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Sędzia 3"
+                    placeholder="Wpisz kwotę"
                     required
                 />
             </div>
 
             <div className="form-group">
-                <label htmlFor="protocolOfficer">Protokolant</label>
+                <label htmlFor="judgmentDescription">
+                    Oznaczenie zaskarżonego wyroku
+                </label>
                 <input
-                    id="protocolOfficer"
-                    name="protocolOfficer"
+                    id="judgmentDescription"
+                    name="judgmentDescription"
                     type="text"
-                    value={formData.protocolOfficer}
+                    value={formData.judgmentDescription}
                     onChange={handleChange}
                     className="form-input"
-                    placeholder="Wpisz nazwisko protokolanta"
+                    placeholder="Wpisz oznaczenie wyroku"
                     required
                 />
             </div>
 
             <div className="form-group">
-                <label htmlFor="subject">Przedmiot</label>
-                <input
-                    id="subject"
-                    name="subject"
-                    type="text"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className="form-input"
-                    placeholder="Wpisz przedmiot"
-                    required
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="decision">Rozstrzygnięcie</label>
+                <label htmlFor="cassationCharges">Zarzuty kasacyjne</label>
                 <textarea
-                    id="decision"
-                    name="decision"
-                    value={formData.decision}
+                    id="cassationCharges"
+                    name="cassationCharges"
+                    value={formData.cassationCharges}
                     onChange={handleChange}
                     className="form-input"
                     rows={4}
-                    placeholder="Wpisz rozstrzygnięcie"
+                    placeholder="Wpisz zarzuty"
                     required
                 ></textarea>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="cassationDemands">Wnioski (żądania)</label>
+                <textarea
+                    id="cassationDemands"
+                    name="cassationDemands"
+                    value={formData.cassationDemands}
+                    onChange={handleChange}
+                    className="form-input"
+                    rows={4}
+                    placeholder="Wpisz wnioski"
+                    required
+                ></textarea>
+            </div>
+
+            <div className="form-group">
+                <span>Rozprawa:</span>
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            name="hearingRequest"
+                            value="hearing"
+                            checked={formData.hearingRequest === "hearing"}
+                            onChange={handleChange}
+                        />
+                        Wniosek o rozprawę
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <input
+                            type="radio"
+                            name="hearingRequest"
+                            value="waiver"
+                            checked={formData.hearingRequest === "waiver"}
+                            onChange={handleChange}
+                        />
+                        Oświadczenie o zrzeczeniu się rozprawy
+                    </label>
+                </div>
             </div>
 
             <div className="form-group">
@@ -230,11 +271,23 @@ const JudgmentForm: React.FC = () => {
                 ></textarea>
             </div>
 
+            <div className="form-group">
+                <label htmlFor="attachments">Załączniki</label>
+                <textarea
+                    id="attachments"
+                    name="attachments"
+                    value={formData.attachments}
+                    onChange={handleChange}
+                    className="form-input"
+                    rows={3}
+                    placeholder="Wpisz załączniki"
+                ></textarea>
+            </div>
+
             <div className="form-buttons-group">
                 <button type="submit" className="form-button">
-                    Dodaj wyrok
+                    Złóż skargę kasacyjną
                 </button>
-
                 <button
                     onClick={() => navigate("/documents")}
                     className="form-button form-button-cancel"
@@ -246,4 +299,4 @@ const JudgmentForm: React.FC = () => {
     );
 };
 
-export default JudgmentForm;
+export default CassationForm;

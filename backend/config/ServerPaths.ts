@@ -8,6 +8,7 @@ const ServerPaths = {
     CASES: "/cases",
     COURTS: "/courts",
     DEPARTMENTS: "/departments",
+    DOCUMENTS: "/documents",
     MESSAGES: "/messages",
     UPLOADS: "/uploads",
     TEST: "/test",

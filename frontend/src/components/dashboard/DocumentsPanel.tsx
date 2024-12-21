@@ -15,7 +15,7 @@ const DocumentsPanel: React.FC = () => {
                 >
                     <h2 className="dashboard-card-title">Skarga</h2>
                     <p className="dashboard-card-description">
-                        Formularz skargi na decyzję lub postanowienie.
+                        Formularz skargi.
                     </p>
                 </div>
                 <div
@@ -24,7 +24,25 @@ const DocumentsPanel: React.FC = () => {
                 >
                     <h2 className="dashboard-card-title">Skarga kasacyjna</h2>
                     <p className="dashboard-card-description">
-                        Formularz skargi kasacyjnej od wyroku sądu I instancji.
+                        Formularz skargi kasacyjnej.
+                    </p>
+                </div>
+                <div
+                    className="dashboard-card"
+                    onClick={() => navigate("/documents/judgment")}
+                >
+                    <h2 className="dashboard-card-title">Wyrok</h2>
+                    <p className="dashboard-card-description">
+                        Formularz wyroku.
+                    </p>
+                </div>
+                <div
+                    className="dashboard-card"
+                    onClick={() => navigate("/documents/ordinance")}
+                >
+                    <h2 className="dashboard-card-title">Zarządzenie</h2>
+                    <p className="dashboard-card-description">
+                        Formularz zarządzenia.
                     </p>
                 </div>
             </div>

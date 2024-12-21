@@ -56,10 +56,10 @@ class CaseController {
     }
 
     async getUserCases(req: core.Request, res: core.Response) {
-        const userId = req.user?.id; // Typ jest teraz rozpoznawalny.
+        const userId = req.user?.id;
     
         if (!userId) {
-            return res.status(403).json({ error: "Unauthorized access" });
+            return res.status(403).json({ error: CaseMessages.USER_CASES_NOT_AUTHORIZED });
         }
     
         try {

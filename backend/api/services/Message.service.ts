@@ -8,30 +8,25 @@ class MessageService {
     }: {
         messageData: MessageModel.CreateMessage;
     }): Promise<MessageModel.Message> {
-        const { caseId, recipientId, senderId, text, file } = messageData;
+        const { caseId, senderId, text, file } = messageData;
         try {
-
             const newMessage = await prisma.message.create({
-                // @ts-ignore
                 data: {
-                    // caseId,
-                    // recipientId,
-                    // senderId,
                     text,
                     file,
                     case: {
                         connect: {
                             case_id: caseId,
-                        }
+                        },
                     },
                     sender: {
-                        connect: { user_id: senderId }
+                        connect: { user_id: senderId },
                     },
                     recipient: {
                         connect: {
-                            user_id: 1 // temp solution
-                        }
-                    }
+                            user_id: 1,
+                        },
+                    },
                 },
             });
 
