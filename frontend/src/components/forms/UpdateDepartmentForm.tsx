@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import api from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const UpdateDepartmentForm: React.FC = () => {
     const navigate = useNavigate();
     const { id: departmentId } = useParams();
@@ -9,10 +11,10 @@ const UpdateDepartmentForm: React.FC = () => {
     const [department, setDepartment] = useState({ name: "", court_id: -1 });
 
     useEffect(() => {
-        api.get(`/departments/${departmentId}`)
+        api.get(`${ServerPaths.DEPARTMENTS}/${departmentId}`)
             .then((response) => setDepartment(response.data))
             .catch((error) =>
-                console.error("Błąd podczas pobierania departamentu:", error)
+                console.error(ClientMessages.DEPARTMENT_EDITING_ERROR, error)
             );
     }, [departmentId]);
 
@@ -20,13 +22,13 @@ const UpdateDepartmentForm: React.FC = () => {
         e.preventDefault();
         try {
             if (department.court_id !== -1 && department.name)
-                await api.put(`/departments/${departmentId}`, {
+                await api.put(`${ServerPaths.DEPARTMENTS}/${departmentId}`, {
                     name: department.name,
                     court_id: department.court_id,
                 });
-            alert("Departament został zaktualizowany");
+            alert(ClientMessages.DEPARTMENT_EDITING_SUCCESS);
         } catch (error) {
-            console.error("Błąd podczas aktualizacji departamentu:", error);
+            console.error(ClientMessages.DEPARTMENT_EDITING_ERROR, error);
         }
     };
 
@@ -71,7 +73,7 @@ const UpdateDepartmentForm: React.FC = () => {
                         Zaktualizuj departament
                     </button>
                     <button
-                        onClick={() => navigate("/courts")}
+                        onClick={() => navigate(RoutesPaths.COURTS)}
                         className="form-button form-button-cancel"
                     >
                         Anuluj

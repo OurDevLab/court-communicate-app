@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import api from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const UpdateCaseForm: React.FC = () => {
     const navigate = useNavigate();
     const { id: caseId } = useParams();
@@ -13,20 +15,20 @@ const UpdateCaseForm: React.FC = () => {
     });
 
     useEffect(() => {
-        api.get(`/cases/${caseId}`)
+        api.get(`${ServerPaths.CASES}/${caseId}`)
             .then((response) => setCaseData(response.data))
             .catch((error) =>
-                console.error("Błąd podczas pobierania sprawy:", error)
+                console.error(ClientMessages.CASE_EDITING_ERROR, error)
             );
     }, [caseId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.put(`/cases/${caseId}`, caseData);
-            alert("Sprawa została zaktualizowana");
+            await api.put(`${ServerPaths.CASES}/${caseId}`, caseData);
+            alert(ClientMessages.CASE_EDITING_SUCCESS);
         } catch (error) {
-            console.error("Błąd podczas aktualizacji sprawy:", error);
+            console.error(ClientMessages.CASE_EDITING_ERROR, error);
         }
     };
 
@@ -84,7 +86,7 @@ const UpdateCaseForm: React.FC = () => {
                         Zaktualizuj sprawę
                     </button>
                     <button
-                        onClick={() => navigate("/cases")}
+                        onClick={() => navigate(RoutesPaths.CASES)}
                         className="form-button form-button-cancel"
                     >
                         Anuluj
