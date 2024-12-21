@@ -4,6 +4,22 @@ import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
+import {
+    ServerPaths,
+    RoutesPaths,
+    ClientMessages,
+    ServerStatuses,
+} from "../../config";
+const { CASES, DOCUMENTS } = ServerPaths;
+const {
+    ERROR_FETCHING_CASES,
+    AUTHENTICATION_ERROR,
+    ORDINANCE_ADDING_SUCCESS,
+    ORDINANCE_ADDING_ERROR,
+    ORDINANCE_ADDING_FAILED,
+} = ClientMessages;
+const { CREATED } = ServerStatuses;
+
 const OrdinanceForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -21,10 +37,10 @@ const OrdinanceForm: React.FC = () => {
     useEffect(() => {
         const fetchCases = async () => {
             try {
-                const response = await api.get("/cases");
+                const response = await api.get(CASES);
                 setCases(response.data);
             } catch (error) {
-                console.error("Błąd podczas pobierania listy spraw", error);
+                console.error(ERROR_FETCHING_CASES, error);
             }
         };
 
@@ -43,7 +59,7 @@ const OrdinanceForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
-            alert("Nie jesteś zalogowany.");
+            alert(AUTHENTICATION_ERROR);
             return;
         }
         try {
@@ -53,13 +69,13 @@ const OrdinanceForm: React.FC = () => {
                 content: formData,
             };
 
-            const response = await api.post(`/documents`, payload);
-            if (response.status === 201) {
-                alert("Zarządzenie zostało dodane.");
+            const response = await api.post(DOCUMENTS, payload);
+            if (response.status === CREATED) {
+                alert(ORDINANCE_ADDING_SUCCESS);
             }
         } catch (error) {
-            console.error("Błąd podczas dodawania zarządzenia", error);
-            alert("Nie udało się dodać zarządzenia.");
+            console.error(ORDINANCE_ADDING_ERROR, error);
+            alert(ORDINANCE_ADDING_FAILED);
         }
     };
 
@@ -148,7 +164,7 @@ const OrdinanceForm: React.FC = () => {
                 </button>
 
                 <button
-                    onClick={() => navigate("/documents")}
+                    onClick={() => navigate(RoutesPaths.DOCUMENTS)}
                     className="form-button form-button-cancel"
                 >
                     Anuluj

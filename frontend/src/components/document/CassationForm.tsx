@@ -4,6 +4,22 @@ import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
+import {
+    ServerPaths,
+    RoutesPaths,
+    ClientMessages,
+    ServerStatuses,
+} from "../../config";
+const { COURTS, CASES, DOCUMENTS } = ServerPaths;
+const {
+    ERROR_FETCHING_DATA,
+    AUTHENTICATION_ERROR,
+    CASSATION_ADDING_SUCCESS,
+    CASSATION_ADDING_ERROR,
+    CASSATION_ADDING_FAILED,
+} = ClientMessages;
+const { CREATED } = ServerStatuses;
+
 const CassationForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -30,13 +46,13 @@ const CassationForm: React.FC = () => {
         const fetchCourtsAndCases = async () => {
             try {
                 const [courtsResponse, casesResponse] = await Promise.all([
-                    api.get("/courts"),
-                    api.get("/cases"),
+                    api.get(COURTS),
+                    api.get(CASES),
                 ]);
                 setCourts(courtsResponse.data);
                 setCases(casesResponse.data);
             } catch (error) {
-                console.error("Błąd podczas pobierania danych", error);
+                console.error(ERROR_FETCHING_DATA, error);
             }
         };
 
@@ -55,7 +71,7 @@ const CassationForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
-            alert("Nie jesteś zalogowany.");
+            alert(AUTHENTICATION_ERROR);
             return;
         }
         try {
@@ -65,13 +81,13 @@ const CassationForm: React.FC = () => {
                 content: formData,
             };
 
-            const response = await api.post(`/documents`, payload);
-            if (response.status === 201) {
-                alert("Skarga kasacyjna została przesłana.");
+            const response = await api.post(DOCUMENTS, payload);
+            if (response.status === CREATED) {
+                alert(CASSATION_ADDING_SUCCESS);
             }
         } catch (error) {
-            console.error("Błąd podczas dodawania skargi kasacyjnej", error);
-            alert("Nie udało się przesłać skargi kasacyjnej.");
+            console.error(CASSATION_ADDING_ERROR, error);
+            alert(CASSATION_ADDING_FAILED);
         }
     };
 
@@ -289,7 +305,7 @@ const CassationForm: React.FC = () => {
                     Złóż skargę kasacyjną
                 </button>
                 <button
-                    onClick={() => navigate("/documents")}
+                    onClick={() => navigate(RoutesPaths.DOCUMENTS)}
                     className="form-button form-button-cancel"
                 >
                     Anuluj

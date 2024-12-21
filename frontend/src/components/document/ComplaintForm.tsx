@@ -4,6 +4,22 @@ import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
+import {
+    ServerPaths,
+    RoutesPaths,
+    ClientMessages,
+    ServerStatuses,
+} from "../../config";
+const { COURTS, DOCUMENTS } = ServerPaths;
+const {
+    ERROR_FETCHING_COURTS,
+    AUTHENTICATION_ERROR,
+    COMPLAINT_ADDING_SUCCESS,
+    COMPLAINT_ADDING_ERROR,
+    COMPLAINT_ADDING_FAILED,
+} = ClientMessages;
+const { CREATED } = ServerStatuses;
+
 const ComplaintForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -46,10 +62,10 @@ const ComplaintForm: React.FC = () => {
     useEffect(() => {
         const fetchCourts = async () => {
             try {
-                const response = await api.get("/courts");
+                const response = await api.get(COURTS);
                 setCourts(response.data);
             } catch (error) {
-                console.error("Błąd podczas pobierania listy sądów", error);
+                console.error(ERROR_FETCHING_COURTS, error);
             }
         };
 
@@ -90,7 +106,7 @@ const ComplaintForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
-            alert("Nie jesteś zalogowany.");
+            alert(AUTHENTICATION_ERROR);
             return;
         }
 
@@ -101,13 +117,13 @@ const ComplaintForm: React.FC = () => {
                 content: formData,
             };
 
-            const response = await api.post(`/documents`, payload);
-            if (response.status === 201) {
-                alert("Skarga została przesłana.");
+            const response = await api.post(DOCUMENTS, payload);
+            if (response.status === CREATED) {
+                alert(COMPLAINT_ADDING_SUCCESS);
             }
         } catch (error) {
-            console.error("Błąd podczas przesyłania skargi", error);
-            alert("Nie udało się przesłać skargi.");
+            console.error(COMPLAINT_ADDING_ERROR, error);
+            alert(COMPLAINT_ADDING_FAILED);
         }
     };
 
@@ -409,7 +425,7 @@ const ComplaintForm: React.FC = () => {
                 </button>
 
                 <button
-                    onClick={() => navigate("/documents")}
+                    onClick={() => navigate(RoutesPaths.DOCUMENTS)}
                     className="form-button form-button-cancel"
                 >
                     Anuluj

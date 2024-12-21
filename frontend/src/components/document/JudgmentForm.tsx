@@ -4,6 +4,22 @@ import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
+import {
+    ServerPaths,
+    RoutesPaths,
+    ClientMessages,
+    ServerStatuses,
+} from "../../config";
+const { COURTS, CASES, DOCUMENTS } = ServerPaths;
+const {
+    ERROR_FETCHING_DATA,
+    AUTHENTICATION_ERROR,
+    JUDGMENT_ADDING_SUCCESS,
+    JUDGMENT_ADDING_ERROR,
+    JUDGMENT_ADDING_FAILED,
+} = ClientMessages;
+const { CREATED } = ServerStatuses;
+
 const JudgmentForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -28,13 +44,13 @@ const JudgmentForm: React.FC = () => {
         const fetchData = async () => {
             try {
                 const [courtsResponse, casesResponse] = await Promise.all([
-                    api.get("/courts"),
-                    api.get("/cases"),
+                    api.get(COURTS),
+                    api.get(CASES),
                 ]);
                 setCourts(courtsResponse.data);
                 setCases(casesResponse.data);
             } catch (error) {
-                console.error("Błąd podczas pobierania danych", error);
+                console.error(ERROR_FETCHING_DATA, error);
             }
         };
 
@@ -53,7 +69,7 @@ const JudgmentForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
-            alert("Nie jesteś zalogowany.");
+            alert(AUTHENTICATION_ERROR);
             return;
         }
         try {
@@ -63,13 +79,13 @@ const JudgmentForm: React.FC = () => {
                 content: formData,
             };
 
-            const response = await api.post(`/documents`, payload);
-            if (response.status === 201) {
-                alert("Wyrok został dodany.");
+            const response = await api.post(DOCUMENTS, payload);
+            if (response.status === CREATED) {
+                alert(JUDGMENT_ADDING_SUCCESS);
             }
         } catch (error) {
-            console.error("Błąd podczas dodawania wyroku", error);
-            alert("Nie udało się dodać wyroku.");
+            console.error(JUDGMENT_ADDING_ERROR, error);
+            alert(JUDGMENT_ADDING_FAILED);
         }
     };
 
@@ -236,7 +252,7 @@ const JudgmentForm: React.FC = () => {
                 </button>
 
                 <button
-                    onClick={() => navigate("/documents")}
+                    onClick={() => navigate(RoutesPaths.DOCUMENTS)}
                     className="form-button form-button-cancel"
                 >
                     Anuluj
