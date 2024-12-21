@@ -6,7 +6,9 @@ const ServerPaths = {
     PROTECTED: "/protected",
 
     CASES: "/cases",
+    CASE: "/case",
     COURTS: "/courts",
+    COURT: "/court",
     DEPARTMENTS: "/departments",
     DOCUMENTS: "/documents",
     MESSAGES: "/messages",

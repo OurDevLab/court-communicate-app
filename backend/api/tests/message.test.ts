@@ -32,13 +32,28 @@ describe("MessageService", () => {
             const result = await messageService.createMessage({
                 messageData: mockMessageCreateInput,
             });
+
             expect(prismaMock).toHaveBeenCalledWith({
-                data: mockMessageCreateInput,
+                data: {
+                    text: mockMessageCreateInput.text,
+                    file: mockMessageCreateInput.file,
+                    case: {
+                        connect: { case_id: mockMessageCreateInput.caseId },
+                    },
+                    sender: {
+                        connect: { user_id: mockMessageCreateInput.senderId },
+                    },
+                    recipient: {
+                        connect: {
+                            user_id: mockMessageCreateInput.recipientId,
+                        },
+                    },
+                },
             });
             expect(result).toEqual(mockMessage);
         });
 
-        it("should throw an error when creating a message fails", async () => {
+        it("should throw an error when message creation fails", async () => {
             const prismaMock = prisma.message.create as jest.Mock;
             prismaMock.mockRejectedValue(new Error("Database error"));
 

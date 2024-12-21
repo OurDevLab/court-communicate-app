@@ -4,6 +4,7 @@ import * as CourtModel from "./Court.model";
 import * as DepartmentModel from "./Department.model";
 import * as MessageModel from "./Message.model";
 import * as UserModel from "./User.model";
+import * as DocumentModel from "./Document.model";
 
 export {
     AuthModel,
@@ -12,4 +13,5 @@ export {
     DepartmentModel,
     MessageModel,
     UserModel,
+    DocumentModel,
 };

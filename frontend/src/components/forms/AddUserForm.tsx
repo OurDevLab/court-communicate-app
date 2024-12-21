@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const AddUserForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -13,13 +15,13 @@ const AddUserForm: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        api.post("/users", { login, password, name, surname, role })
+        api.post(ServerPaths.USERS, { login, password, name, surname, role })
             .then(() => {
-                alert("Użytkownik został dodany");
-                navigate("/users");
+                alert(ClientMessages.USER_ADDING_SUCCESS);
+                navigate(RoutesPaths.USERS);
             })
             .catch((error) =>
-                console.error("Błąd podczas dodawania użytkownika:", error)
+                console.error(ClientMessages.USER_ADDING_ERROR, error)
             );
     };
 
@@ -82,7 +84,7 @@ const AddUserForm: React.FC = () => {
                         Dodaj użytkownika
                     </button>
                     <button
-                        onClick={() => navigate("/users")}
+                        onClick={() => navigate(RoutesPaths.USERS)}
                         className="form-button form-button-cancel"
                     >
                         Anuluj

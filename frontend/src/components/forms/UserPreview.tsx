@@ -1,8 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const UserPreview: React.FC = () => {
+    const navigate = useNavigate();
+
     const { id: userId } = useParams();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -11,12 +15,12 @@ const UserPreview: React.FC = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await api.get(`/users/${userId}`);
+                const response = await api.get(
+                    `${ServerPaths.USERS}/${userId}`
+                );
                 setUser(response.data);
             } catch (err) {
-                setError(
-                    "Wystąpił błąd podczas pobierania danych użytkownika" + err
-                );
+                setError(ClientMessages.USERS_PREVIEW_ERROR + err);
             } finally {
                 setLoading(false);
             }
@@ -29,6 +33,9 @@ const UserPreview: React.FC = () => {
 
     return (
         <div className="container">
+            <button onClick={() => navigate(RoutesPaths.USERS)}>
+                Wróć do listy użytkowników
+            </button>
             <h1>Dane użytkownika</h1>
             <p>Nazwa: {user.name}</p>
             <p>Email: {user.email}</p>

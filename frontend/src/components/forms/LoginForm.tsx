@@ -4,6 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/User.context";
 import { jwtDecode } from "jwt-decode";
 
+import {
+    ServerPaths,
+    ConfigVariables,
+    RoutesPaths,
+    ClientMessages,
+} from "../../config";
+
+const { tokenKey } = ConfigVariables;
+
 const LoginForm: React.FC = () => {
     const navigate = useNavigate();
     const { setId, setUsername } = useContext(UserContext);
@@ -14,24 +23,28 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await api.post("/login", { login, password });
+            const response = await api.post(ServerPaths.LOGIN, {
+                login,
+                password,
+            });
 
             const { token } = response.data;
             if (token) {
-                localStorage.setItem("token", token);
+                localStorage.setItem(tokenKey, token);
 
-                const decoded: { id: number; username: string } = jwtDecode(token);
+                const decoded: { id: number; username: string } =
+                    jwtDecode(token);
                 setId(decoded.id);
                 setUsername(decoded.username);
 
                 alert(response.data.message);
-                navigate("/");
+                navigate(RoutesPaths.DASHBOARD);
             } else {
-                alert("Brak tokena w odpowiedzi serwera.");
+                alert(ClientMessages.ERROR_FETCHING_TOKEN);
             }
         } catch (error) {
-            console.error("Błąd podczas logowania:", error);
-            alert("Błąd podczas logowania");
+            console.error(ClientMessages.LOGIN_ERROR, error);
+            alert(ClientMessages.LOGIN_ERROR);
         }
     };
 
@@ -62,7 +75,12 @@ const LoginForm: React.FC = () => {
                 <button type="submit" className="form-button">
                     Zaloguj się
                 </button>
-                <p>Nie masz konta? Skorzystaj z <Link to="/register">formularza rejestracji</Link></p>
+                <p>
+                    Nie masz konta? Skorzystaj z{" "}
+                    <Link to={RoutesPaths.REGISTER}>
+                        formularza rejestracji
+                    </Link>
+                </p>
             </form>
         </div>
     );

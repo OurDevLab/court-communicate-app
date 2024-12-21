@@ -15,6 +15,23 @@ import api from "../../api";
 import { Navigation } from "../dashboard";
 import { useNavigate } from "react-router-dom";
 
+import {
+    ConfigVariables,
+    ServerPaths,
+    RoutesPaths,
+    ClientMessages,
+} from "../../config";
+
+const { CASES, CASE, MESSAGES } = ServerPaths;
+const { LOGIN } = RoutesPaths;
+const { webSocketURL, webSocketTimeout, tokenKey, messageEvent, closeEvent } =
+    ConfigVariables;
+const {
+    ERROR_FETCHING_CASES,
+    ERROR_FETCHING_MESSAGES,
+    MISSING_SENDER_OR_SELECTED_ID,
+} = ClientMessages;
+
 const Chat: React.FC = () => {
     const navigate = useNavigate();
 
@@ -32,12 +49,12 @@ const Chat: React.FC = () => {
     }, []);
 
     function connectToWs() {
-        const ws = new WebSocket("ws://localhost:5001/ws");
+        const ws = new WebSocket(webSocketURL);
         setWs(ws);
 
-        ws.addEventListener("message", handleMessage);
-        ws.addEventListener("close", () => {
-            setTimeout(connectToWs, 1000);
+        ws.addEventListener(messageEvent, handleMessage);
+        ws.addEventListener(closeEvent, () => {
+            setTimeout(connectToWs, webSocketTimeout);
         });
     }
 
@@ -47,10 +64,10 @@ const Chat: React.FC = () => {
 
     async function fetchCases() {
         try {
-            const res = await api.get("/cases");
+            const res = await api.get(CASES);
             setCases(res.data);
         } catch (error) {
-            console.error("Error fetching cases:", error);
+            console.error(ERROR_FETCHING_CASES, error);
         }
     }
 
@@ -60,10 +77,10 @@ const Chat: React.FC = () => {
 
     async function fetchMessages() {
         try {
-            const res = await api.get(`/messages/case/${selectedCaseId}`);
+            const res = await api.get(`${MESSAGES}${CASE}/${selectedCaseId}`);
             setMessages(res.data);
         } catch (error) {
-            console.error("Błąd podczas pobierania listy wiadomości:", error);
+            console.error(ERROR_FETCHING_MESSAGES, error);
         }
     }
 
@@ -76,12 +93,12 @@ const Chat: React.FC = () => {
 
     function sendMessage(ev?: React.FormEvent, file = null) {
         if (ev) ev.preventDefault();
-    
+
         if (!id || !selectedCaseId) {
-            console.error("Missing senderId or selectedCaseId");
+            console.error(MISSING_SENDER_OR_SELECTED_ID);
             return;
         }
-    
+
         ws?.send(
             JSON.stringify({
                 caseId: selectedCaseId,
@@ -91,7 +108,7 @@ const Chat: React.FC = () => {
                 file,
             })
         );
-    
+
         setMessages((prev) => [
             ...prev,
             {
@@ -121,8 +138,8 @@ const Chat: React.FC = () => {
     function logout() {
         setId(null);
         setUsername(null);
-        localStorage.removeItem("token");
-        navigate("/login");
+        localStorage.removeItem(tokenKey);
+        navigate(LOGIN);
     }
 
     useEffect(() => {

@@ -21,6 +21,7 @@ export const CaseMessages = {
     SELECTED_CASE_NOT_FOUND: "Sprawa nie została znaleziona",
     GET_SELECTED_CASE_ERROR: "Błąd podczas pobierania sprawy",
     UPDATE_CASE_SUCCESS: "Wybrana sprawa została zaktualizowana",
+    USER_CASES_NOT_AUTHORIZED: "Unauthorized access",
     CASE_TO_UPDATE_NOT_FOUND:
         "Nie znaleziono sprawy przeznaczonej do aktualizacji",
     UPDATE_CASE_ERROR: "Aktualizacja sprawy nie powiodła się",
@@ -89,4 +90,14 @@ export const UserMessages = {
     DELETE_USER_ERROR: "Nie udało się usunąć użytkownika",
 };
 
+export const DocumentMessages = {
+    ADD_DOCUMENT_ERROR: "Nie udało się dodać dokumentu",
+    GET_DOCUMENTS_ERROR: "Nie udało się pobrać listy dokumentów",
+    UPDATE_DOCUMENT_ERROR: "Nie udało się zaktualizować dokumentu",
+    DELETE_DOCUMENT_ERROR: "Nie udało się usunąć dokumentu",
+};
+
 export const TestMessage = "Hello World!";
+
+export const ServerLaunchMessage = (port: number) =>
+    `Serwer uruchomiono na porcie ${port}`;

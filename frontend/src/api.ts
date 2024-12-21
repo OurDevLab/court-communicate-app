@@ -1,13 +1,19 @@
 import axios from "axios";
 
+import { ConfigVariables, RoutesPaths, ServerStatuses } from "./config";
+
+const { serverURL, tokenKey, authHeader } = ConfigVariables;
+const { LOGIN } = RoutesPaths;
+const { UNAUTHORIZED } = ServerStatuses;
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: serverURL,
 });
 
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem(tokenKey);
     if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `${authHeader} ${token}`;
     }
     return config;
 });
@@ -15,9 +21,9 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
-            localStorage.removeItem("token");
-            window.location.href = "/login";
+        if (error.response?.status === UNAUTHORIZED) {
+            localStorage.removeItem(tokenKey);
+            window.location.href = LOGIN;
         }
         return Promise.reject(error);
     }

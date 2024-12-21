@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import api from "../../api";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const UpdateCourtForm: React.FC = () => {
     const navigate = useNavigate();
     const { id: courtId } = useParams();
@@ -13,24 +15,24 @@ const UpdateCourtForm: React.FC = () => {
     });
 
     useEffect(() => {
-        api.get(`/courts/${courtId}`)
+        api.get(`${ServerPaths.COURTS}/${courtId}`)
             .then((response) => setCourt(response.data))
             .catch((error) =>
-                console.error("Błąd podczas pobierania sądu:", error)
+                console.error(ClientMessages.COURT_EDITING_ERROR, error)
             );
     }, [courtId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.put(`/courts/${courtId}`, {
+            await api.put(`${ServerPaths.COURTS}/${courtId}`, {
                 name: court.name,
                 seat: court.seat,
                 court_type: court.court_type,
             });
-            alert("Sąd został zaktualizowany");
+            alert(ClientMessages.COURT_EDITING_SUCCESS);
         } catch (error) {
-            console.error("Błąd podczas aktualizacji sądu:", error);
+            console.error(ClientMessages.COURT_EDITING_ERROR, error);
         }
     };
 
@@ -79,7 +81,7 @@ const UpdateCourtForm: React.FC = () => {
                         Zaktualizuj sąd
                     </button>
                     <button
-                        onClick={() => navigate("/courts")}
+                        onClick={() => navigate(RoutesPaths.COURTS)}
                         className="form-button form-button-cancel"
                     >
                         Anuluj

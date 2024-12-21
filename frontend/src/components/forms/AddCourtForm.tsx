@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
+import { ServerPaths, RoutesPaths, ClientMessages } from "../../config";
+
 const AddCourtForm: React.FC = () => {
     const navigate = useNavigate();
 
@@ -12,11 +14,15 @@ const AddCourtForm: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post("/courts", { name, seat, court_type: courtType });
-            alert("Sąd został dodany");
-            navigate("/courts");
+            await api.post(ServerPaths.COURTS, {
+                name,
+                seat,
+                court_type: courtType,
+            });
+            alert(ClientMessages.CASE_ADDING_SUCCESS);
+            navigate(RoutesPaths.COURTS);
         } catch (error) {
-            console.error("Błąd podczas dodawania sądu:", error);
+            console.error(ClientMessages.CASE_ADDING_ERROR, error);
         }
     };
 
@@ -59,7 +65,7 @@ const AddCourtForm: React.FC = () => {
                         Dodaj sąd
                     </button>
                     <button
-                        onClick={() => navigate("/courts")}
+                        onClick={() => navigate(RoutesPaths.COURTS)}
                         className="form-button form-button-cancel"
                     >
                         Anuluj
